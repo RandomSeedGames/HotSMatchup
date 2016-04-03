@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang='en' ng-app="hotsCounters">
+<head>
+	<meta charset="UTF-8">
+	<title ng-bind="'HotSCounters' + $root.title">HotSCounters</title>
+
+	<meta name="keywords" content="HotS, Counters, Heroes, tips, advice, Storm, Blizzard">
+	<meta name="description" content="A site to share tips and advice to counter and synergize with Heroes of the Storm heroes and maps">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Exo+2|Lato|Roboto">
+	<link rel="stylesheet" href="css/hotscounter.css">
+	<link rel="stylesheet" href="css/hotscounter-mobile.css" media="only screen and (max-device-width:736px)">
+	<link rel="shortcut icon" href="img/favicon.ico?v=2">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-route.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-resource.min.js"></script>
+	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script src="libs/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+
+	<script src="js/hotscounter.js"></script>
+	<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-61328984-1', 'auto');
+	//ga('send', 'pageview');
+
+	</script>
+</head>
+
+<body>
+	<div class="mainContent">
+		<div class="topBanner">
+			<div class="container">
+				<div class="bannerTitleSection linkContainer">
+					<div class="mainTitle">HotSCounters</div>
+					<div class="mainSubtitle">A site to share advice for Heroes of the Storm</div>
+					<a href="#/"><span class="linkSpanner"></span></a>
+				</div>
+				<div class="bannerMenuSection">
+					<div class="navPanel" ng-controller="navCtrl">
+						<ul class="">
+							<li ng-class="navClassFor('newest')"><a href="#/newest">New</a></li>
+							<li ng-class="navClassFor('hero')"><a href="#/">Heroes</a></li>
+							<li ng-class="navClassFor('map')"><a href="#/map">Maps</a></li>
+							<li ng-class="navClassFor('about')"><a href="#/about">About</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="container">
+			<div ng-view autoscroll="true"></div>
+		</div>
+
+		<div class="push"></div>
+	</div>
+
+	<footer class="hideMobile">
+		<div class="container">
+			<div class="col-md-5 col-md-offset-7">
+				<vote-stats />
+			</div>
+		</div>
+	</footer>
+
+	<script>
+		var app = angular.module('hotsCounters', [
+				'ngRoute',
+				'heroListCtrl',
+				'heroDetailCtrl',
+				'tipList',
+				'mapListCtrl',
+				'mapDetailCtrl',
+				'utilDataService',
+				'voteStats',
+				'newestTipsFullCtrl',
+                'voteFilters',
+                'dataCtrl'
+				]);
+
+		app.controller('navCtrl', ['$scope', '$location', '$window', '$rootScope', '$route', function($scope, $location, $window, $rootScope, $route) {
+			$scope.navClassFor = function(page) {
+				var current = $location.path().substring(1);
+
+				if (page === 'hero') {
+					return (current === '' || current.indexOf('hero') === 0) ? "selected" : 0;
+				}
+
+				if (page === 'map') {
+					return current.indexOf('map') === 0 ? "selected" : 0;
+				}
+
+				return page === current ? "selected" : "";
+			};
+
+			$rootScope.$on('$viewContentLoaded', function(event) {
+				$window.ga('send', 'pageview', { page: $location.url() });
+			});
+
+			$rootScope.$on('$routeChangeSuccess', function(currentRoute, prevRoute) {
+				if ($route.title) {
+					$rootScope.title = $route.title;
+				} else {
+					$rootScope.title = '';
+				}
+			});
+		}]);
+
+		app.config(['$routeProvider', function($routeProvider) {
+			$routeProvider.
+				when('/hero/:heroId', {
+					templateUrl: 'template/hero.html',
+					controller: 'heroDetailCtrl'
+				}).
+				when('/', {
+					templateUrl: 'template/hero-list.html',
+					controller: 'heroListCtrl'
+				}).
+				when('/map/', {
+					templateUrl: 'template/map-list.html',
+					controller: 'mapListCtrl',
+					title: ' - Maps'
+				}).
+				when('/map/:mapId', {
+					templateUrl: 'template/map.html',
+					controller: 'mapDetailCtrl'
+				}).
+				when('/newest', {
+					templateUrl: 'template/newest-tips-full.html',
+					controller: 'newestTipsFullCtrl'
+				}).
+				when('/about', {
+					templateUrl: 'template/about.html',
+					title: ' - About'
+                }).
+                when('/data', {
+                    templateUrl: 'template/data.html',
+                    controller: 'dataCtrl'
+                });
+		}]);
+	</script>
+</body>
+</html>

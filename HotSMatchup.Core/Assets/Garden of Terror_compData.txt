@@ -1,0 +1,1055 @@
+
+
+<!DOCTYPE html>
+<html>
+    <head><meta charset="utf-8" /><title>
+	Heroes of the Storm (HotS): Team Compositions
+</title><meta name="keywords" content="Heroes of the Storm, HOTS, HOTS Logs, HOTSLogs, MMR, Ranking, Leaderboard, Replay, Replay File, Download Replay, Hero, Statistics, Matchmaking, Matchmaking Rating, Talent, Data" /><meta name="viewport" content="width=device-width, initial-scale=1" /><link href="/favicon.ico?v=2" rel="shortcut icon" type="image/x-icon" />
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script src="//cdn.datatables.net/s/dt/dt-1.10.10,cr-1.3.0/datatables.min.js"></script>
+        <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" /><link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" /><link href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.0/animate.min.css" rel="stylesheet" /><link id="linkCSSTheme" href="/assets/css/style-blue.css" rel="stylesheet" />
+
+        <script type="text/javascript">
+
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+            ga('create', 'UA-53777913-1', 'auto');
+            ga('require', 'displayfeatures');
+            ga('send', 'pageview');
+
+            var RadGridReorderStripes;
+            $(document).ready(function ()
+            {
+                // Set DataTable Defaults
+                $.extend($.fn.dataTable.defaults, {
+                    "paging": false,
+                    "info": false,
+                    "colReorder": true
+                });
+
+                $.extend($.fn.dataTableExt.oSort, {
+                    "smart-asc": function (a, b) {
+                        if (a === b)
+                            return 0;
+
+                        if (a === "&nbsp;")
+                            return 1;
+                        else if (b === "&nbsp;")
+                            return -1;
+
+                        var parseA = parseFloat(a);
+                        var parseB = parseFloat(b);
+
+                        if (isNaN(parseA))
+                            parseA = a;
+
+                        if (isNaN(parseB))
+                            parseB = b;
+
+                        if (parseA > parseB)
+                            return 1;
+                        else
+                            return -1;
+                    },
+
+                    "smart-desc": function (a, b) {
+                        if (a === b)
+                            return 0;
+
+                        if (a === "&nbsp;")
+                            return 1;
+                        else if (b === "&nbsp;")
+                            return -1;
+
+                        var parseA = parseFloat(a);
+                        var parseB = parseFloat(b);
+
+                        if (isNaN(parseA))
+                            parseA = a;
+
+                        if (isNaN(parseB))
+                            parseB = b;
+
+                        if (parseB > parseA)
+                            return 1;
+                        else
+                            return -1;
+                    }
+                });
+
+                // Function to Style RadGrid Stripes On DataTable Events
+                RadGridReorderStripes = function (RadGrid) {
+                    $("tr", RadGrid).removeClass("rgRow rgAltRow");
+                    $("tr.odd", RadGrid).addClass("rgRow");
+                    $("tr.even", RadGrid).addClass("rgAltRow");
+                };
+
+                // All DataTable Draw Events Should Restripe
+                $(document).on("draw.dt", "table", function () { if ($(this).hasClass("dataTable")) RadGridReorderStripes(this); })
+
+                // Set up Back to Top Link
+                $("#back-top").hide();
+                $(window).scroll(function (e) { if ($(this).scrollTop() > 100) { $('#back-top').fadeIn(); } else { $('#back-top').fadeOut(); } });
+                $('#back-top a').click(function (e) { $('body,html').animate({ scrollTop: 0 }, 500); return false; });
+
+                // Set Up Sign Out Menu Icon
+                $("#LoginStatus").html("<i class='fa fa-sign-out'></i>");
+
+                // Keep Focus on Player Search Menu Popup
+                $(".dropdown-menu input").click(function (e) { e.stopPropagation(); });
+
+                // Focus on Player Name Textbox when Clicking on Player Search
+                $(".playerSearchDropdown").click(function (e) { setTimeout(function () { $(".TextBoxPlayerSearch").focus(); }, 10); });
+
+                function PlayerSearchRedirect()
+                {
+                    window.location.href = "/PlayerSearch?Name=" + $(".TextBoxPlayerSearch").val();
+                }
+
+                $("#ButtonPlayerSearch").click(function (e) { PlayerSearchRedirect(); });
+
+                $(".TextBoxPlayerSearch").keydown(function (e) {
+                    if (e.keyCode === 13 /* Enter key */)
+                    {
+                        e.preventDefault();
+                        PlayerSearchRedirect();
+                    }
+                });
+
+                // Use onclick popups for tooltips (for Mobile devices)
+                $(document).on("click", "tr[title], img[title], div[title]", function (e) {
+                    if (!$(this).next().hasClass("titlePopup"))
+                    {
+                        $(".titlePopup").remove();
+                        $(this).after("<span class='titlePopup'>" + $(this).attr("title") + "</span>");
+                    }
+                    else
+                        $(".titlePopup").remove();
+                });
+            });
+
+        </script>
+
+        
+            <script src="//d3pkae9owd2lcf.cloudfront.net/mb105.gz.js"></script>
+            <script type="text/javascript">
+
+                if (typeof MonkeyBroker === "undefined")
+                {
+                    
+                    ga("send", "event", "AdFillMonkeyBroker", "Ad Blocked", { nonInteraction: true });
+
+                    if (false && Math.random() > 0.9)
+                        $(document).ready(function () {
+                            $("#AdBlockWarning").removeAttr("style");
+                            ga("send", "event", "AdFillMonkeyBroker", "Ad Block Popup Message", { nonInteraction: true });
+                        });
+                }
+                else
+                {
+                    ga("send", "event", "AdFillMonkeyBroker", "Ad Displayed", { nonInteraction: true });
+
+                    var windowWidth = $(window).width();
+
+                    MonkeyBroker.site = {
+                        "id": 1788,
+                        "customDomainName": "mb.zam.com",
+                        "reportBadAd": true,
+                        "lightboxCallback": function (e, t) {
+                            var iframeAdReport = document.createElement("iframe");
+                            iframeAdReport.src = e;
+                            iframeAdReport.height = 0;
+                            iframeAdReport.width = 0;
+                            document.getElementsByTagName("body")[0].appendChild(iframeAdReport);
+                            t.parentNode.removeChild(t);
+                            alert("Thank you for your feedback, we will look into it!");
+                        }
+                    };
+	  
+                    MonkeyBroker.addAttribute("mb_pc", "teamcompositions");
+                    MonkeyBroker.addAttribute("mb_ri", 90);
+
+                    if (windowWidth >= 1300)
+                    {
+                        MonkeyBroker.addSlot({ slot: "Horizontal_1", sizes: ["970x250", "970x90", "728x90"] });
+                        MonkeyBroker.addSlot({ slot: "Horizontal_2", sizes: ["970x250", "970x90", "728x90", "Unstacked 300x250"] });
+                    }
+                    else if (windowWidth > 728)
+                    {
+                        MonkeyBroker.addSlot({ slot: "Horizontal_1_Thin", sizes: ["728x90"] });
+                        MonkeyBroker.addSlot({ slot: "Horizontal_2_Thin", sizes: ["728x90", "Unstacked 300x250"] });
+                    }
+                    else
+                        ga("send", "event", "AdFillMonkeyBroker", "None", { nonInteraction: true });
+
+                    if (windowWidth >= 1300)
+                        MonkeyBroker.addSlot({ slot: "Vertical_2", sizes: ["300x600", "300x250", "160x600", "120x600", "Stacked 300x250"] });
+                    else if (windowWidth >= 1070)
+                        MonkeyBroker.addSlot({ slot: "Vertical_2_Thin", sizes: ["160x600", "120x600"] });
+
+                    MonkeyBroker.go();
+
+                    var VerticalSlotFilled = false;
+                    var VerticalThinSlotFilled = false;
+                    function FillMonkeyBrokerSlots()
+                    {
+                        if (windowWidth >= 1300 && !VerticalSlotFilled)
+                        {
+                            VerticalSlotFilled = true;
+
+                            MonkeyBroker.regSlotsMap["Vertical_2"].el = document.getElementById("mb_adslot_1");
+                            MonkeyBroker.regSlotsMap["Vertical_2"].elCreated = true;
+                            MonkeyBroker.fillSlot("Vertical_2");
+                            ga("send", "event", "AdFillMonkeyBroker", "Vertical_2", { nonInteraction: true });
+                        }
+                        else if (windowWidth >= 1070 && windowWidth < 1300 && !VerticalThinSlotFilled)
+                        {
+                            VerticalThinSlotFilled = true;
+
+                            MonkeyBroker.regSlotsMap["Vertical_2_Thin"].el = document.getElementById("mb_adslot_2");
+                            MonkeyBroker.regSlotsMap["Vertical_2_Thin"].elCreated = true;
+                            MonkeyBroker.fillSlot("Vertical_2_Thin");
+                            ga("send", "event", "AdFillMonkeyBroker", "Vertical_2_Thin", { nonInteraction: true });
+                        }
+                    }
+
+                    function FillMonkeyBrokerHorizontal1()
+                    {
+                        if (windowWidth >= 1300) {
+                            MonkeyBroker.fillSlot("Horizontal_1");
+                            ga("send", "event", "AdFillMonkeyBroker", "Horizontal_1", { nonInteraction: true });
+                        }
+                        else if (windowWidth > 728) {
+                            MonkeyBroker.fillSlot("Horizontal_1_Thin");
+                            ga("send", "event", "AdFillMonkeyBroker", "Horizontal_1_Thin", { nonInteraction: true });
+                        }
+                    }
+
+                    
+                    var advertisementOffsetTop = 80;
+                    var advertisementOffsetTopAnimate = advertisementOffsetTop - 40;
+                    if (advertisementOffsetTopAnimate < 0)
+                        advertisementOffsetTopAnimate = 0;
+                    var isVerticalAdvertisementFixed = false;
+                    function FixVerticalAdvertisement(forceRefresh)
+                    {
+                        if (forceRefresh)
+                            isVerticalAdvertisementFixed = !isVerticalAdvertisementFixed;
+
+                        var scrollTop = $(document).scrollTop();
+                        var advertisementPlaceholder = $("#advertisementPlaceholder");
+                        var advertisementTop = advertisementPlaceholder.offset().top;
+                        var advertisementLeft = advertisementPlaceholder.width() + advertisementPlaceholder.position().left;
+
+                        var verticalAdvertisements = $("#mb_adslot_1, #mb_adslot_2");
+                        if (!isVerticalAdvertisementFixed && advertisementTop - scrollTop < advertisementOffsetTop)
+                        {
+                            isVerticalAdvertisementFixed = true;
+                            verticalAdvertisements.css("position", "fixed");
+                            verticalAdvertisements.css("top", advertisementOffsetTopAnimate + "px");
+                            verticalAdvertisements.css("left", (advertisementLeft + 30) + "px");
+
+                            if (!forceRefresh)
+                            {
+                                
+                                verticalAdvertisements.css("top", advertisementOffsetTopAnimate + "px");
+                                verticalAdvertisements.animate({ top: advertisementOffsetTop + "px" });
+                            }
+                            else
+                                
+                                verticalAdvertisements.css("top", advertisementOffsetTop + "px");
+                        }
+                        else if (isVerticalAdvertisementFixed && advertisementTop - scrollTop >= advertisementOffsetTop) {
+                            isVerticalAdvertisementFixed = false;
+                            verticalAdvertisements.css("position", "relative");
+                            verticalAdvertisements.css("top", "0");
+                            verticalAdvertisements.css("left", "0");
+                        }
+                    }
+
+                    $(document).ready(function () {
+                        FillMonkeyBrokerSlots();
+
+                        if ($(window).height() >= 600)
+                        {
+                            FixVerticalAdvertisement();
+
+                            $(window).scroll(function () {
+                                FixVerticalAdvertisement();
+                            });
+
+                            $(window).resize(function () {
+                                FixVerticalAdvertisement(true);
+                            });
+                        }
+                    });
+                }
+                
+            </script>
+        
+
+            <style type="text/css">
+
+                /*  */
+                @media (min-width: 1300px) and (max-width: 1579px)
+                {
+                    #body.container
+                    {
+                        margin-right: 330px;
+                    }
+                }
+
+            </style>
+
+        
+
+        <style type="text/css">
+
+            @media (min-width: 1820px)
+            {
+                .advertisementBannerMonkeyBrokerRight, .advertisementBannerMonkeyBrokerRightThin
+                {
+                    left: 1170px;
+                }
+            }
+
+            @media (min-width: 1300px) and (max-width: 1819px)
+            {
+                #body.container
+                {
+                    width: 990px;
+                }
+
+                .advertisementBannerMonkeyBrokerRight, .advertisementBannerMonkeyBrokerRightThin
+                {
+                    left: 990px;
+                }
+            }
+
+            @media (min-width: 1070px) and (max-width: 1299px)
+            {
+                #body.container
+                {
+                    width: 750px;
+                }
+
+                .advertisementBannerMonkeyBrokerRight, .advertisementBannerMonkeyBrokerRightThin
+                {
+                    left: 750px;
+                }
+            }
+
+            @media (max-width: 1069px)
+            {
+                .container {
+                    width: auto;
+                }
+            }
+
+            @media (max-width: 1069px)
+            {
+                .advertisementBannerMonkeyBrokerRight, .advertisementBannerMonkeyBrokerRightThin
+                {
+                    display: none;
+                }
+            }
+
+            @media (max-width: 728px)
+            {
+                .advertisementBannerMonkeyBrokerTop, .advertisementBannerMonkeyBrokerBottom
+                {
+                    display: none;
+                }
+            }
+
+            .advertisementBannerMonkeyBrokerRight, .advertisementBannerMonkeyBrokerRightThin
+            {
+                position: relative;
+                height: 0;
+            }
+
+            @media print
+            {
+                .no-print, .no-print *
+                {
+                    display: none !important;
+                }
+            }
+
+            .RadGrid, .btn-border
+            {
+               border-radius: 10px !important;
+               overflow: hidden;
+            }
+
+            .RadGrid img
+            {
+                border-radius: 3px;
+                background-color: #484848;
+            }
+
+            .advertisementBanner
+            {
+                min-height: 90px;
+                margin-left: auto;
+                margin-right: auto;
+                text-align: center;
+                overflow: hidden;
+            }
+
+            .section-title
+            {
+                margin-top: 0;
+            }
+
+            .titlePopup
+            {
+                position: absolute;
+                padding: 4px;
+                background-color: white;
+                border: 1px solid black;
+                border-radius: 3px;
+                min-width: 100px;
+            }
+
+            /* Not able to select certain tabs if hovering expands them to a different row */
+            .nav-tabs li a, .nav-tabs li a:hover
+            {
+                transition: none !important;
+            }
+
+            .nav-tabs li.active a:hover
+            {
+                padding-left: 25px !important;
+                padding-right: 25px !important;
+            }
+
+            .nav-tabs li a:hover
+            {
+                padding-left: 9px !important;
+                padding-right: 9px !important;
+            }
+
+            #footer
+            {
+                padding: 5px 0;
+            }
+
+            #footer-widgets
+            {
+                padding-bottom: 0;
+            }
+
+            #footer-widgets .col-md-4
+            {
+                margin-top: 5px;
+            }
+
+            #AdBlockWarning
+            {
+                position: fixed;
+                width: 400px;
+                top: 30%;
+                left: 50%;
+                margin-left: -200px;
+                z-index: 99999;
+            }
+
+            /* Datatables Styles */
+            table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc {
+                cursor: pointer;
+            }
+
+            table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc {
+                background-image: none;
+            }
+
+            table.dataTable thead .sorting_asc:after {
+                content: "\f0de";
+                font-family: FontAwesome;
+                float: right;
+            }
+
+            table.dataTable thead .sorting_desc:after {
+                content: "\f0dd";
+                font-family: FontAwesome;
+                float: right;
+            }
+
+            .mbReportBadAd {
+                font-size: 10px;
+                cursor: pointer;
+                margin: -13px 0 0 auto;
+                max-width: 125px;
+                opacity: 0.5;
+            }
+
+            .mbReportBadAd:hover {
+                opacity: 1;
+            }
+
+            .advertisementBannerMonkeyBrokerTop .mbReportBadAd, .advertisementBannerMonkeyBrokerBottom .mbReportBadAd {
+                margin-right: 250px;
+            }
+
+        </style>
+
+        
+
+    <meta name="description" content="View hero team composition win rate and balance statistics, with filtering options for specific heroes and maps." />
+
+    <style type="text/css">
+
+        .rgAdvPart
+        {
+            display: none;
+        }
+
+        .RadGrid img
+        {
+            background-color: initial !important;
+        }
+
+        .HeroSubRoleInfoLink
+        {
+            float: right;
+        }
+
+    </style>
+
+<link href="https://www.hotslogs.com/Sitewide/TeamCompositions" rel="canonical" /><link href="/WebResource.axd?d=XMvugF2skguXxGMFpflQoHQv26kEA4TOAKcw2qIpvSjgDEYBkvEV9QpDoLwyDRt9l7ndWZZf2DLRJ4KjYNAMtMxOL-DxwRTdA1Xz5VwiXJZMPoJ5OtpwVxpdLQyVrjdUKBQ3J5Uv5vGyVl-YW1NvtWfb-nY1&amp;t=635881825220000000" type="text/css" rel="stylesheet" class="Telerik_stylesheet" /><link href="/WebResource.axd?d=6h8W07vfUIeIy9hWuM9hTqvGBNj7zIqkaUBJbusJAPpuNjM_VMCZRF_-q0pjcVp4lfs-8cFhfKzWvDauN7qFWNtnQc8hhrPQWEbBLT8ZbRKa_krFZbYmBOEr33zEdyRqOJxemeXdCWfq4hnFvRb0Y7PmIG4rqOulp_G6zMAgMnZyTUUQ0&amp;t=635881825220000000" type="text/css" rel="stylesheet" class="Telerik_stylesheet" /><link href="/WebResource.axd?d=W1T0Fb4QEpZqpZFLuEBEmwTTmm7p2xWpMdQpGykEIV-VYUnFNrWRZbs6UJHslZUqXvXVk889RMzbOqWR0JMcaJl7pAsw2J_yUXwzG4VghbSYB_0gAmOhFLVSC2JhArRM6UQBVMA9jaq8i7b60kYQezyQseU1&amp;t=635881825220000000" type="text/css" rel="stylesheet" class="Telerik_stylesheet" /><link href="/WebResource.axd?d=QZ3OWgL7X68RUfmUSi8xEQnK57QXJjOZVi-bX3hD3rjEehWWraiAf06_zcleRGvvJAuyw5i6oeHdjSUGzzaRGIWEnCL3OAfK6JPc-91thU30ZR-h1DgXu5Y_07iAYmEddG5RTG1em0NyNdQVJK8PX_eQJfQ1&amp;t=635881825220000000" type="text/css" rel="stylesheet" class="Telerik_stylesheet" /><link href="/WebResource.axd?d=WkjfkYav3snHKa_Wr9J754l2JnXQsQIXoRgIi33p-1rmQAxvSUvSY5zV_4oBxZGvDJo_dGta_Tp-rOfZMyPp_tujJd7yfk3eYH5nRBg-8UEGK6UXu6oAGM-x91vgpPaAw2io-nRs_T8NuxhzmVaObLFOtCCcwpKwAqeS-8kb5bMNelO20&amp;t=635881825220000000" type="text/css" rel="stylesheet" class="Telerik_stylesheet" /><link href="/WebResource.axd?d=EnXCl5Lroe154u5JqBQkV8BQ7FnUCnkE9n5w78NIFnYmzmyVtJ-Iyh9mmr2wHCDfyGfVp6bqlI7DcfqmKESQTKqXHc6MWKMPA0JjJkoovds3Urtn7gNIurUUQOn_o8IJIy8CHw2&amp;t=635881825220000000" type="text/css" rel="stylesheet" class="Telerik_stylesheet" /><link href="/WebResource.axd?d=ViFDzkt85FW2FC4_NkCJHkX6A_xkN_rT-rm6ty1BDJBqArO12qcGqtzKiz8VlXMjSiXGMv8SESc4oKt7Gshpx9x-n18r_aYE84XCPkd4xK1tRFvv_O6MpLj-RAxbrEsjyjOGMidLioQeQcylYO78ZPUtyfII_7vZW9wBtxH9Wuj0QAoh0&amp;t=635881825220000000" type="text/css" rel="stylesheet" class="Telerik_stylesheet" /></head>
+
+    <body>
+        <form method="post" action="./TeamCompositions?Grouping=3%3fGarden+of+Terror" id="ctl01">
+<input type="hidden" name="ctl10_TSM" id="ctl10_TSM" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKLTkzNTI0NDEzMw9kFgJmD2QWBgIBD2QWAgINDxYCHgdWaXNpYmxlZ2QCAw9kFgoCAQ8WAh8AaGQCCA9kFgoCAQ8WAh8AZ2QCAw8QDxYCHgtfIURhdGFCb3VuZGdkEBUDFkdyb3VwIGJ5IEhlcm8gU3ViIFJvbGUSR3JvdXAgYnkgSGVybyBSb2xlDUdyb3VwIGJ5IEhlcm8VAwEwATEBMhQrAwNnZ2cWAWZkAgUPEA8WBB8BZx8AaGQQFTAKQWxsIEhlcm9lcwdBYmF0aHVyCUFudWInYXJhawdBcnRhbmlzBkFydGhhcwdBem1vZGFuCkJyaWdodHdpbmcEQ2hlbgNDaG8GRGlhYmxvBkUuVC5DLgdGYWxzdGFkBEdhbGwHR2F6bG93ZQhHcmV5bWFuZQdJbGxpZGFuBUphaW5hB0pvaGFubmEJS2FlbCd0aGFzCEtlcnJpZ2FuCEtoYXJhemltBkxlb3JpYwVMaSBMaQtMdC4gTW9yYWxlcwZMdW5hcmEJTWFsZnVyaW9uB011cmFkaW4FTXVya3kHTmF6ZWVibwROb3ZhBlJheW5vcgZSZWhnYXIGUmV4eGFyC1NndC4gSGFtbWVyBVNvbnlhCFN0aXRjaGVzCFN5bHZhbmFzCFRhc3NhZGFyC1RoZSBCdXRjaGVyEFRoZSBMb3N0IFZpa2luZ3MGVGhyYWxsBlR5Y2h1cwZUeXJhZWwHVHlyYW5kZQVVdGhlcgVWYWxsYQZaYWdhcmEHWmVyYXR1bBUwAi0xB0FiYXRodXIJQW51YidhcmFrB0FydGFuaXMGQXJ0aGFzB0F6bW9kYW4KQnJpZ2h0d2luZwRDaGVuA0NobwZEaWFibG8GRS5ULkMuB0ZhbHN0YWQER2FsbAdHYXpsb3dlCEdyZXltYW5lB0lsbGlkYW4FSmFpbmEHSm9oYW5uYQlLYWVsJ3RoYXMIS2VycmlnYW4IS2hhcmF6aW0GTGVvcmljBUxpIExpC0x0LiBNb3JhbGVzBkx1bmFyYQlNYWxmdXJpb24HTXVyYWRpbgVNdXJreQdOYXplZWJvBE5vdmEGUmF5bm9yBlJlaGdhcgZSZXh4YXILU2d0LiBIYW1tZXIFU29ueWEIU3RpdGNoZXMIU3lsdmFuYXMIVGFzc2FkYXILVGhlIEJ1dGNoZXIQVGhlIExvc3QgVmlraW5ncwZUaHJhbGwGVHljaHVzBlR5cmFlbAdUeXJhbmRlBVV0aGVyBVZhbGxhBlphZ2FyYQdaZXJhdHVsFCsDMGdnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZxYBZmQCBw8QDxYCHwFnZBAVCwhBbGwgTWFwcxdCYXR0bGVmaWVsZCBvZiBFdGVybml0eRBCbGFja2hlYXJ0J3MgQmF5DUN1cnNlZCBIb2xsb3cMRHJhZ29uIFNoaXJlEEdhcmRlbiBvZiBUZXJyb3INSGF1bnRlZCBNaW5lcxBJbmZlcm5hbCBTaHJpbmVzClNreSBUZW1wbGUYVG9tYiBvZiB0aGUgU3BpZGVyIFF1ZWVuDlRvd2VycyBvZiBEb29tFQsCLTEXQmF0dGxlZmllbGQgb2YgRXRlcm5pdHkQQmxhY2toZWFydCdzIEJheQ1DdXJzZWQgSG9sbG93DERyYWdvbiBTaGlyZRBHYXJkZW4gb2YgVGVycm9yDUhhdW50ZWQgTWluZXMQSW5mZXJuYWwgU2hyaW5lcwpTa3kgVGVtcGxlGFRvbWIgb2YgdGhlIFNwaWRlciBRdWVlbg5Ub3dlcnMgb2YgRG9vbRQrAwtnZ2dnZ2dnZ2dnZxYBZmQCCw8PFgIeF0VuYWJsZUFqYXhTa2luUmVuZGVyaW5naGRkAg4PEGRkFgFmZAIPDxBkZBYBZmQCEA8QZGQWAWZkAgUPFgIfAGdkGAUFKWN0bDAwJE1haW5Db250ZW50JFJhZEdyaWRUZWFtQ29tcG9zaXRpb25zDxQrAAJkFwMFC0VkaXRJbmRleGVzFgAFD1NlbGVjdGVkSW5kZXhlcxYABQhQYWdlU2l6ZQJkZAUvY3RsMDAkTWFpbkNvbnRlbnQkUmFkR3JpZFRlYW1Db21wb3NpdGlvbnMkY3RsMDAPFCsAAxQrAAJkFwQFC18hSXRlbUNvdW50AmQFCF8hUENvdW50AgUFEEN1cnJlbnRQYWdlSW5kZXhmBQZfIURTSUMCsAMWAh4DX3NlFgQeAl9jAgEeATAWBB4DX2ZuBQpXaW5QZXJjZW50HgNfc28LKXVUZWxlcmlrLldlYi5VSS5HcmlkU29ydE9yZGVyLCBUZWxlcmlrLldlYi5VSSwgVmVyc2lvbj0yMDE2LjEuMTEzLjQ1LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPTEyMWZhZTc4MTY1YmEzZDQCFCsAZBQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUEVGFuawUQU3VzdGFpbmVkIERhbWFnZQUMQnVyc3QgRGFtYWdlBQdTdXBwb3J0BQRUYW5rFCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQRUYW5rBQVTaWVnZQUMQnVyc3QgRGFtYWdlBQdTdXBwb3J0BQRUYW5rFCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQRUYW5rBQVTaWVnZQUQU3VzdGFpbmVkIERhbWFnZQUMQnVyc3QgRGFtYWdlBQdTdXBwb3J0FCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQRUYW5rBQdVdGlsaXR5BRBTdXN0YWluZWQgRGFtYWdlBQxCdXJzdCBEYW1hZ2UFB1N1cHBvcnQUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFEFN1c3RhaW5lZCBEYW1hZ2UFEFN1c3RhaW5lZCBEYW1hZ2UFDEJ1cnN0IERhbWFnZQUHU3VwcG9ydBQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUEVGFuawUFU2llZ2UFDEJ1cnN0IERhbWFnZQUIQW1idXNoZXIFB1N1cHBvcnQUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFBVNpZWdlBQVTaWVnZQUMQnVyc3QgRGFtYWdlBQdTdXBwb3J0FCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQRUYW5rBQdVdGlsaXR5BQVTaWVnZQUMQnVyc3QgRGFtYWdlBQdTdXBwb3J0FCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQRUYW5rBRBTdXN0YWluZWQgRGFtYWdlBQxCdXJzdCBEYW1hZ2UFCEFtYnVzaGVyBQdTdXBwb3J0FCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQRUYW5rBRBTdXN0YWluZWQgRGFtYWdlBQxCdXJzdCBEYW1hZ2UFDEJ1cnN0IERhbWFnZQUHU3VwcG9ydBQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUEVGFuawUQU3VzdGFpbmVkIERhbWFnZQUMQnVyc3QgRGFtYWdlBQdTdXBwb3J0BQdCcnVpc2VyFCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQRUYW5rBQVTaWVnZQUQU3VzdGFpbmVkIERhbWFnZQUHU3VwcG9ydAUEVGFuaxQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUEVGFuawUMQnVyc3QgRGFtYWdlBQdTdXBwb3J0BQdCcnVpc2VyBQRUYW5rFCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQRUYW5rBQVTaWVnZQUMQnVyc3QgRGFtYWdlBQdTdXBwb3J0BQdCcnVpc2VyFCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQRUYW5rBQVTaWVnZQUQU3VzdGFpbmVkIERhbWFnZQUIQW1idXNoZXIFB1N1cHBvcnQUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFBVNpZWdlBQxCdXJzdCBEYW1hZ2UFDEJ1cnN0IERhbWFnZQUHU3VwcG9ydBQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUEVGFuawUFU2llZ2UFEFN1c3RhaW5lZCBEYW1hZ2UFB1N1cHBvcnQFB0JydWlzZXIUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFB1V0aWxpdHkFDEJ1cnN0IERhbWFnZQUHU3VwcG9ydAUHQnJ1aXNlchQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUEVGFuawUMQnVyc3QgRGFtYWdlBQxCdXJzdCBEYW1hZ2UFB1N1cHBvcnQFBFRhbmsUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFBVNpZWdlBQVTaWVnZQUQU3VzdGFpbmVkIERhbWFnZQUHU3VwcG9ydBQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUEVGFuawUMQnVyc3QgRGFtYWdlBQxCdXJzdCBEYW1hZ2UFCEFtYnVzaGVyBQdTdXBwb3J0FCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQRUYW5rBQxCdXJzdCBEYW1hZ2UFDEJ1cnN0IERhbWFnZQUHU3VwcG9ydAUHQnJ1aXNlchQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUEVGFuawUFU2llZ2UFEFN1c3RhaW5lZCBEYW1hZ2UFEFN1c3RhaW5lZCBEYW1hZ2UFB1N1cHBvcnQUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFB1V0aWxpdHkFBVNpZWdlBRBTdXN0YWluZWQgRGFtYWdlBQdTdXBwb3J0FCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQRUYW5rBQdVdGlsaXR5BQxCdXJzdCBEYW1hZ2UFCEFtYnVzaGVyBQdTdXBwb3J0FCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQZIZWFsZXIFBVNpZWdlBQxCdXJzdCBEYW1hZ2UFCEFtYnVzaGVyBQhBbWJ1c2hlchQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUEVGFuawUHVXRpbGl0eQUQU3VzdGFpbmVkIERhbWFnZQUIQW1idXNoZXIFB1N1cHBvcnQUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFDEJ1cnN0IERhbWFnZQUIQW1idXNoZXIFB1N1cHBvcnQFB0JydWlzZXIUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFDEJ1cnN0IERhbWFnZQUIQW1idXNoZXIFCEFtYnVzaGVyBQdTdXBwb3J0FCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQRUYW5rBRBTdXN0YWluZWQgRGFtYWdlBQxCdXJzdCBEYW1hZ2UFB1N1cHBvcnQFB1N1cHBvcnQUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFEFN1c3RhaW5lZCBEYW1hZ2UFEFN1c3RhaW5lZCBEYW1hZ2UFB1N1cHBvcnQFBFRhbmsUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFBVNpZWdlBQhBbWJ1c2hlcgUHU3VwcG9ydAUHQnJ1aXNlchQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUEVGFuawUMQnVyc3QgRGFtYWdlBQdTdXBwb3J0BQdCcnVpc2VyBQdCcnVpc2VyFCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQdCcnVpc2VyBRBTdXN0YWluZWQgRGFtYWdlBQxCdXJzdCBEYW1hZ2UFB1N1cHBvcnQFB0JydWlzZXIUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFEFN1c3RhaW5lZCBEYW1hZ2UFCEFtYnVzaGVyBQdTdXBwb3J0BQRUYW5rFCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQRUYW5rBRBTdXN0YWluZWQgRGFtYWdlBRBTdXN0YWluZWQgRGFtYWdlBQhBbWJ1c2hlcgUHU3VwcG9ydBQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUEVGFuawUMQnVyc3QgRGFtYWdlBQhBbWJ1c2hlcgUHU3VwcG9ydAUEVGFuaxQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUEVGFuawUHVXRpbGl0eQUQU3VzdGFpbmVkIERhbWFnZQUQU3VzdGFpbmVkIERhbWFnZQUHU3VwcG9ydBQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUHQnJ1aXNlcgUMQnVyc3QgRGFtYWdlBQhBbWJ1c2hlcgUHU3VwcG9ydAUHQnJ1aXNlchQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUHQnJ1aXNlcgUFU2llZ2UFDEJ1cnN0IERhbWFnZQUHU3VwcG9ydAUHQnJ1aXNlchQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUEVGFuawUHVXRpbGl0eQUFU2llZ2UFCEFtYnVzaGVyBQdTdXBwb3J0FCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQZIZWFsZXIFBVNpZWdlBQVTaWVnZQUMQnVyc3QgRGFtYWdlBQhBbWJ1c2hlchQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUEVGFuawUHVXRpbGl0eQUQU3VzdGFpbmVkIERhbWFnZQUHU3VwcG9ydAUHQnJ1aXNlchQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUHQnJ1aXNlcgUQU3VzdGFpbmVkIERhbWFnZQUQU3VzdGFpbmVkIERhbWFnZQUMQnVyc3QgRGFtYWdlBQdTdXBwb3J0FCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQRUYW5rBQVTaWVnZQUFU2llZ2UFCEFtYnVzaGVyBQdTdXBwb3J0FCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQRUYW5rBRBTdXN0YWluZWQgRGFtYWdlBRBTdXN0YWluZWQgRGFtYWdlBRBTdXN0YWluZWQgRGFtYWdlBQdTdXBwb3J0FCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQdCcnVpc2VyBRBTdXN0YWluZWQgRGFtYWdlBQxCdXJzdCBEYW1hZ2UFCEFtYnVzaGVyBQdTdXBwb3J0FCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQdCcnVpc2VyBQxCdXJzdCBEYW1hZ2UFDEJ1cnN0IERhbWFnZQUIQW1idXNoZXIFB1N1cHBvcnQUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFB0JydWlzZXIFBVNpZWdlBRBTdXN0YWluZWQgRGFtYWdlBQxCdXJzdCBEYW1hZ2UFB1N1cHBvcnQUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFEFN1c3RhaW5lZCBEYW1hZ2UFEFN1c3RhaW5lZCBEYW1hZ2UFB1N1cHBvcnQFB1N1cHBvcnQUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFBVNpZWdlBQhBbWJ1c2hlcgUHU3VwcG9ydAUEVGFuaxQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUEVGFuawUFU2llZ2UFB1N1cHBvcnQFB1N1cHBvcnQFB0JydWlzZXIUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFBVNpZWdlBQxCdXJzdCBEYW1hZ2UFB1N1cHBvcnQFB1N1cHBvcnQUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFB1V0aWxpdHkFB1V0aWxpdHkFDEJ1cnN0IERhbWFnZQUHU3VwcG9ydBQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUEVGFuawUQU3VzdGFpbmVkIERhbWFnZQUQU3VzdGFpbmVkIERhbWFnZQUHU3VwcG9ydAUHQnJ1aXNlchQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUEVGFuawUFU2llZ2UFEFN1c3RhaW5lZCBEYW1hZ2UFB1N1cHBvcnQFB1N1cHBvcnQUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFB1N1cHBvcnQFBVNpZWdlBRBTdXN0YWluZWQgRGFtYWdlBQxCdXJzdCBEYW1hZ2UFCEFtYnVzaGVyFCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQdCcnVpc2VyBQVTaWVnZQUFU2llZ2UFEFN1c3RhaW5lZCBEYW1hZ2UFB1N1cHBvcnQUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFB1V0aWxpdHkFEFN1c3RhaW5lZCBEYW1hZ2UFB1N1cHBvcnQFBFRhbmsUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFEFN1c3RhaW5lZCBEYW1hZ2UFCEFtYnVzaGVyBQdTdXBwb3J0BQdCcnVpc2VyFCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQRUYW5rBQdVdGlsaXR5BQxCdXJzdCBEYW1hZ2UFDEJ1cnN0IERhbWFnZQUHU3VwcG9ydBQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUHQnJ1aXNlcgUFU2llZ2UFDEJ1cnN0IERhbWFnZQUIQW1idXNoZXIFB1N1cHBvcnQUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFB0JydWlzZXIFB1V0aWxpdHkFEFN1c3RhaW5lZCBEYW1hZ2UFDEJ1cnN0IERhbWFnZQUHU3VwcG9ydBQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUEVGFuawUMQnVyc3QgRGFtYWdlBQdTdXBwb3J0BQdTdXBwb3J0BQdCcnVpc2VyFCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQdCcnVpc2VyBRBTdXN0YWluZWQgRGFtYWdlBQxCdXJzdCBEYW1hZ2UFDEJ1cnN0IERhbWFnZQUHU3VwcG9ydBQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUEVGFuawUFU2llZ2UFBVNpZWdlBQdTdXBwb3J0BQdCcnVpc2VyFCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQRUYW5rBQdVdGlsaXR5BQxCdXJzdCBEYW1hZ2UFB1N1cHBvcnQFB1N1cHBvcnQUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFEFN1c3RhaW5lZCBEYW1hZ2UFB1N1cHBvcnQFB1N1cHBvcnQFB0JydWlzZXIUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFEFN1c3RhaW5lZCBEYW1hZ2UFB1N1cHBvcnQFB1N1cHBvcnQFBFRhbmsUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFB0JydWlzZXIFBVNpZWdlBQxCdXJzdCBEYW1hZ2UFDEJ1cnN0IERhbWFnZQUHU3VwcG9ydBQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUGSGVhbGVyBQVTaWVnZQUFU2llZ2UFEFN1c3RhaW5lZCBEYW1hZ2UFEFN1c3RhaW5lZCBEYW1hZ2UUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBkhlYWxlcgUFU2llZ2UFBVNpZWdlBRBTdXN0YWluZWQgRGFtYWdlBQxCdXJzdCBEYW1hZ2UUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFB0JydWlzZXIFEFN1c3RhaW5lZCBEYW1hZ2UFDEJ1cnN0IERhbWFnZQUHU3VwcG9ydAUHU3VwcG9ydBQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUHQnJ1aXNlcgUFU2llZ2UFEFN1c3RhaW5lZCBEYW1hZ2UFEFN1c3RhaW5lZCBEYW1hZ2UFB1N1cHBvcnQUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFBVNpZWdlBQVTaWVnZQUFU2llZ2UFBkhlYWxlchQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUHQnJ1aXNlcgUFU2llZ2UFEFN1c3RhaW5lZCBEYW1hZ2UFCEFtYnVzaGVyBQdTdXBwb3J0FCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQRUYW5rBQVTaWVnZQUQU3VzdGFpbmVkIERhbWFnZQUMQnVyc3QgRGFtYWdlBQZIZWFsZXIUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFB0JydWlzZXIFEFN1c3RhaW5lZCBEYW1hZ2UFCEFtYnVzaGVyBQdTdXBwb3J0BQdCcnVpc2VyFCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQRUYW5rBRBTdXN0YWluZWQgRGFtYWdlBQhBbWJ1c2hlcgUHU3VwcG9ydAUHU3VwcG9ydBQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUHQnJ1aXNlcgUHVXRpbGl0eQUMQnVyc3QgRGFtYWdlBQhBbWJ1c2hlcgUHU3VwcG9ydBQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUEVGFuawUMQnVyc3QgRGFtYWdlBQxCdXJzdCBEYW1hZ2UFB1N1cHBvcnQFB1N1cHBvcnQUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFBVNpZWdlBQVTaWVnZQUMQnVyc3QgRGFtYWdlBQZIZWFsZXIUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFB0JydWlzZXIFEFN1c3RhaW5lZCBEYW1hZ2UFB1N1cHBvcnQFB1N1cHBvcnQFB0JydWlzZXIUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFB1V0aWxpdHkFDEJ1cnN0IERhbWFnZQUHU3VwcG9ydAUEVGFuaxQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUHQnJ1aXNlcgUFU2llZ2UFCEFtYnVzaGVyBQdTdXBwb3J0BQdCcnVpc2VyFCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQdCcnVpc2VyBQdVdGlsaXR5BQxCdXJzdCBEYW1hZ2UFB1N1cHBvcnQFB0JydWlzZXIUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFB0JydWlzZXIFBVNpZWdlBQVTaWVnZQUIQW1idXNoZXIFB1N1cHBvcnQUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFBVNpZWdlBQhBbWJ1c2hlcgUIQW1idXNoZXIFB1N1cHBvcnQUKwACFCsABQUKQ2hhcmFjdGVyMQUKQ2hhcmFjdGVyNQUKQ2hhcmFjdGVyNAUKQ2hhcmFjdGVyMwUKQ2hhcmFjdGVyMhQrAAUFBFRhbmsFBVNpZWdlBQVTaWVnZQUQU3VzdGFpbmVkIERhbWFnZQUGSGVhbGVyFCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQdTdXBwb3J0BRBTdXN0YWluZWQgRGFtYWdlBRBTdXN0YWluZWQgRGFtYWdlBQxCdXJzdCBEYW1hZ2UFCEFtYnVzaGVyFCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQdCcnVpc2VyBQVTaWVnZQUFU2llZ2UFDEJ1cnN0IERhbWFnZQUHU3VwcG9ydBQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUEVGFuawUMQnVyc3QgRGFtYWdlBQdTdXBwb3J0BQdTdXBwb3J0BQRUYW5rFCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQZIZWFsZXIFBVNpZWdlBRBTdXN0YWluZWQgRGFtYWdlBQxCdXJzdCBEYW1hZ2UFDEJ1cnN0IERhbWFnZRQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUHQnJ1aXNlcgUMQnVyc3QgRGFtYWdlBQdTdXBwb3J0BQdTdXBwb3J0BQdCcnVpc2VyFCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQdCcnVpc2VyBRBTdXN0YWluZWQgRGFtYWdlBRBTdXN0YWluZWQgRGFtYWdlBQhBbWJ1c2hlcgUHU3VwcG9ydBQrAAIUKwAFBQpDaGFyYWN0ZXIxBQpDaGFyYWN0ZXI1BQpDaGFyYWN0ZXI0BQpDaGFyYWN0ZXIzBQpDaGFyYWN0ZXIyFCsABQUHQnJ1aXNlcgUFU2llZ2UFEFN1c3RhaW5lZCBEYW1hZ2UFDEJ1cnN0IERhbWFnZQUGSGVhbGVyFCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQdCcnVpc2VyBRBTdXN0YWluZWQgRGFtYWdlBQxCdXJzdCBEYW1hZ2UFDEJ1cnN0IERhbWFnZQUGSGVhbGVyFCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQRUYW5rBRBTdXN0YWluZWQgRGFtYWdlBQxCdXJzdCBEYW1hZ2UFDEJ1cnN0IERhbWFnZQUGSGVhbGVyFCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQZIZWFsZXIFEFN1c3RhaW5lZCBEYW1hZ2UFEFN1c3RhaW5lZCBEYW1hZ2UFDEJ1cnN0IERhbWFnZQUMQnVyc3QgRGFtYWdlFCsAAhQrAAUFCkNoYXJhY3RlcjEFCkNoYXJhY3RlcjUFCkNoYXJhY3RlcjQFCkNoYXJhY3RlcjMFCkNoYXJhY3RlcjIUKwAFBQdCcnVpc2VyBQdVdGlsaXR5BRBTdXN0YWluZWQgRGFtYWdlBQhBbWJ1c2hlcgUHU3VwcG9ydGQFTGN0bDAwJE1haW5Db250ZW50JFJhZEdyaWRUZWFtQ29tcG9zaXRpb25zJGN0bDAwJGN0bDAzJGN0bDAxJFBhZ2VTaXplQ29tYm9Cb3gPFCsAAgUDMTAwBQMxMDBkBR5fX0NvbnRyb2xzUmVxdWlyZVBvc3RCYWNrS2V5X18WAgUpY3RsMDAkTWFpbkNvbnRlbnQkUmFkR3JpZFRlYW1Db21wb3NpdGlvbnMFTGN0bDAwJE1haW5Db250ZW50JFJhZEdyaWRUZWFtQ29tcG9zaXRpb25zJGN0bDAwJGN0bDAzJGN0bDAxJFBhZ2VTaXplQ29tYm9Cb3gFTGN0bDAwJE1haW5Db250ZW50JFJhZEdyaWRUZWFtQ29tcG9zaXRpb25zJGN0bDAwJGN0bDAyJGN0bDAwJFBhZ2VTaXplQ29tYm9Cb3gPFCsAAmUFAzEwMGTIzH26R4m3UFppTwOM4Tf3iT9PNQ==" />
+
+
+<script src="/Telerik.Web.UI.WebResource.axd?_TSM_HiddenField_=ctl10_TSM&amp;compress=1&amp;_TSM_CombinedScripts_=%3b%3bSystem.Web.Extensions%2c+Version%3d4.0.0.0%2c+Culture%3dneutral%2c+PublicKeyToken%3d31bf3856ad364e35%3aen-US%3a93a6b8ed-f453-4cc5-9080-8017894b33b0%3aea597d4b%3bTelerik.Web.UI%2c+Version%3d2016.1.113.45%2c+Culture%3dneutral%2c+PublicKeyToken%3d121fae78165ba3d4%3aen-US%3acb3d1a3e-7303-48dc-a612-61700f912203%3a16e4e7cd%3a58366029%3af7645509%3a24ee1bba%3af46195d3%3a2003d0b8%3ac128760b%3a88144a7a%3a1e771326%3aaa288e2d%3ab092aa46%3aed16cbdc" type="text/javascript"></script>
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="9773FEF4" />
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAEaKJ5WO1DdqjrP7MQcFG88ZvQKDGQah9TqQx9H51wu3DFoJLke1JjxJsZn6Lg9Qttuo6iCAvYUXfmlBaXPpm675DHeI+ZhElmQTgTfryUkpboP4ZcF4bpvfdndKrmzqLx0teXFz9nQV7glX5k5xT5ZCpOz4hYRERiRRLcEmRVS/zMgp1VhNMgv1HPwGEBbY37TZbbXqVJJ23wnXTILcGChSWT1dYefT2d6+IWhPTvc1DLR2DbXFpfXx9QwZepwgu8+0V90NcgQPJIHCCeQlTSqj0uoPCq1o02HfBAEQGCSA5JTp/CGI0XVhWwEk0uILn9kdCPz9nqRZ1+zQQil/ewoCDyTUIRcd+sTh4NnG6Y1LsmY0eD79R/s1zYifc07+Cndu0z6rGrs0FCPihdenXoXcjSVcjg2wukKPiazyqxFkGBvVmBOhUxJqbOeonb2TCaQyfy5q0bsAfsx4JGZU0OKQ0c1I/lnOTAqBxCzp7Lmca8dpFlBosBsbHXOltaour7Mdc5hY4aW1C9gI65jEnjcZxW81xdMtz5sxPm8OpOCH62cxj25p28TuUI4GBzReUc6nvvxP/4r0axUjKkhGvh7+OxKPzYTJTB755UYMvm5RmJhidv8ivKHfYVgTtz8dEyjNdK5jA2cad6NdnsKzQjx1V3sCZRjj17ygmOiWrUSueUxwkwUyTPuGu3BigbU3DAMNytiHdz2m6CK5PsnrLuldnO6JX9Rzw1hhN+AncBwXsfh9enQqtgYD/hRfAP2XX8YuLehml7PuWBxiBq4PpF19syfJG+oE6qN2R+6Vr9aR8L0bMznWwWNNV/UMbDnFyZYsUK/t2+JWvuPNDzMaPS4zQLdTlk1u0glT9TaBLwIgqxjnOTcKvNFuU0xqizuQOX+2jn3YpzFFkHU8o+bQHjwSKF1Vp7Mu0sRg7PwGtJ0WMowRAaGkdc1IyskF0tXX8DPzO2D51dB1tQMc7GfjAZdI2plfhdzmlzgJfpaOJPRKfpatBpbo/M/VY6AAfU/d1AJ8ELUip6Iop5wBiyKGsGyq9SGJSD//fZDUmHBk0/1WYBGAXPschDGCiAuxo2FG0Bwo0vnhrBuBbyZor8oRifYwUvdG+ZwDcQWJx/sRpA1Qc5LcTgkRKiaGNQcVlawk4VhhIJJlMWy8tEdFYWEJJFwaM/ygDKQKZL78QvpETVwicn6QWpWxJVWfnJeiYpQIZPdfkMPKIDss6cpwPY0NjWy1lhtiCkGdwvT1wgL4MyZ4LtDUgXCZmeKo8kdzNzXTIDuZ5UUUbRmCncZpIVmhx2A5RBjB8fWdOkpvxadjQmKhffCuNJMR+BzwrBIYd6dJRPaUXM8nopVjgr8RaBDaHisogsqbNWpovvs3cbaFlj1QXMWy79PrOaDzesCZdRrFGZSqGtrEZrkNA3rhqtrKzj25FghEWXFT5n1Zh6e4C3T5zdj3FIfTdJuc/garVD2Otj3lLCJmAiY/wI3k7eDo8+EPSU9qVeDv9hvhyIHjq6/WJy1sH+E=" />
+
+            
+
+            
+
+            <div id="AdBlockWarning" class="alert alert-warning" style="display: none;">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4>Information</h4>
+                <p>To remain a free service, HOTS Logs relies on website advertisements.  To cover server costs and the development of new features, please consider white listing this site or directly supporting via a <a href="/Account/Premium">Premium account</a></p>
+                <p>Thank you!  <a href="https://www.reddit.com/user/barrett777/">Ben Barrett, Creator</a></p>
+            </div>
+
+            <nav id="header" role="navigation" class="navbar navbar-static-top navbar-default no-print ">
+                <div class="container">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" style="position: relative;">
+                            <span class="sr-only">Toggle navigation</span>
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <a href="/Default"><img src="//d1i1jxrdh2kvwy.cloudfront.net/Images/logo.png" alt="HOTS Logs"></a>
+                    </div> <!-- navbar-header -->
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/Social/GroupFinder">Group Finder</a></li>
+                            <li class="dropdown">
+                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Leaderboard</a>
+                                <ul class="dropdown-menu dropdown-menu-left">
+                                    <li><a href="/Rankings?GameMode=5">Team League</a></li>
+                                    <li><a href="/Rankings?GameMode=4">Hero League</a></li>
+                                    <li><a href="/Rankings?GameMode=3">Quick Match</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Hero Details</a>
+                                <ul class="dropdown-menu dropdown-menu-left">
+                                    <li><a href="/Sitewide/HeroDetails">Hero Details</a></li>
+                                    <li><a href="/Sitewide/HeroAndMapStatistics">Sitewide Hero and Map Statistics</a></li>
+                                    <li><a href="/Sitewide/TeamDraft">Team Draft Helper</a></li>
+                                    <li><a href="/Sitewide/TeamCompositions">Team Compositions</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Media</a>
+                                <ul class="dropdown-menu dropdown-menu-left">
+                                    <li class="dropdown-submenu">
+                                        <a href="javascript:void(0);">Replays</a>
+                                        <ul class="dropdown-menu dropdown-menu-left">
+                                            <li><a href="/Replays/ReplaySearch">Search and Download Replays</a></li>
+                                            <li><a href="/Player/MatchHistory">Share Replay</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown-submenu">
+                                        <a href="javascript:void(0);">Video</a>
+                                        <ul class="dropdown-menu dropdown-menu-left">
+                                            <li><a href="https://www.youtube.com/playlist?list=PLlWC1VLv7fbBRnJT4XlJ3wR3B60ykTYXn">Top 5 Plays w/ MFPallytime</a></li>
+                                            <li><a href="https://www.youtube.com/playlist?list=PLwGe1IvxKBTlmz3Ke8aQVOL0puEEMVX_O">HotS Hottest Plays</a></li>
+                                            <li><a href="https://www.youtube.com/playlist?list=PLlWC1VLv7fbCLexoZvW6aK2Yp37T-RswQ">Heroes Academy</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">My Account</a>
+                                <ul class="dropdown-menu dropdown-menu-left">
+                                    <li><a href="/Player/Profile">Profile</a></li>
+                                    <li><a href="/Player/MatchHistory">Match History</a></li>
+                                    <li><a href="/Account/Upload">Upload Replays</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#" class="dropdown-toggle playerSearchDropdown" data-toggle="dropdown"><i class="fa fa-search"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right" style="padding: 10px;">
+                                    <table><tr>
+                                        <td style="padding-right: 10px;"><input name="ctl00$ctl30" type="text" class="TextBoxPlayerSearch" style="color: black;" placeholder="Find a Player" /></td>
+                                        <td><div ID="ButtonPlayerSearch" class="btn btn-border btn-ar btn-primary">Search</div></td>
+                                    </tr></table>
+                                </div>
+                            </li>
+                            
+                        </ul>
+                    </div><!-- navbar-collapse -->
+                </div><!-- container -->
+            </nav>
+
+            <div id="body" class="container" style="min-height: 800px;">
+                <section class="content-wrapper main-content clear-fix">
+                    <div id="advertisementPlaceholder"></div>
+                    <div id="advertisementBannerMonkeyBrokerTop" class="advertisementBanner advertisementBannerMonkeyBrokerTop">
+                        <script type="text/javascript"> FillMonkeyBrokerHorizontal1(); </script>
+                    </div>
+                    <hgroup id="h1Title" class="title"><h1 class="section-title">Team Compositions</h1></hgroup>
+                    <div id="advertisementBannerMonkeyBrokerRight" style="width: 300px;"><div id="mb_adslot_1" class="advertisementBannerMonkeyBrokerRight"></div></div>
+                    <div id="advertisementBannerMonkeyBrokerRightThin" style="width: 160px;"><div id="mb_adslot_2" class="advertisementBannerMonkeyBrokerRightThin"></div></div>
+                    
+
+    <p>View hero team composition win rate and balance statistics, with filtering options for specific heroes and maps.</p>
+    <p>Results shown are gathered from the most recent 60 days of Hero League data.  When grouping by hero role, role mirror matchups are excluded.  When grouping by hero sub role, compositions with less than 200 games played are excluded.</p>
+
+    <div class="RadAjaxPanel" id="ctl00_MainContent_ctl00_MainContent_HeroSubRoleInfoLinkPanel">
+	<a href="/Info/HeroSubRole" id="MainContent_HeroSubRoleInfoLink" class="HeroSubRoleInfoLink btn btn-info" target="_blank"><i class="fa fa-question"></i> Info</a>
+</div>
+    <select name="ctl00$MainContent$DropDownHeroGrouping" id="MainContent_DropDownHeroGrouping">
+	<option selected="selected" value="0">Group by Hero Sub Role</option>
+	<option value="1">Group by Hero Role</option>
+	<option value="2">Group by Hero</option>
+
+</select>
+    <div class="RadAjaxPanel" id="ctl00_MainContent_ctl00_MainContent_DropDownHeroPanel">
+
+</div>
+    <select name="ctl00$MainContent$DropDownMapName" id="MainContent_DropDownMapName">
+	<option selected="selected" value="-1">All Maps</option>
+	<option value="Battlefield of Eternity">Battlefield of Eternity</option>
+	<option value="Blackheart&#39;s Bay">Blackheart&#39;s Bay</option>
+	<option value="Cursed Hollow">Cursed Hollow</option>
+	<option value="Dragon Shire">Dragon Shire</option>
+	<option value="Garden of Terror">Garden of Terror</option>
+	<option value="Haunted Mines">Haunted Mines</option>
+	<option value="Infernal Shrines">Infernal Shrines</option>
+	<option value="Sky Temple">Sky Temple</option>
+	<option value="Tomb of the Spider Queen">Tomb of the Spider Queen</option>
+	<option value="Towers of Doom">Towers of Doom</option>
+
+</select>
+    <br />
+    <br />
+
+    <div class="RadAjaxPanel" id="ctl00_MainContent_ctl00_MainContent_RadGridTeamCompositionsPanel">
+	<div id="ctl00_MainContent_RadGridTeamCompositions" class="RadGrid RadGrid_WebBlue" style="width:100%;">
+
+	<!-- 2016.1.113.45 --><table class="rgMasterTable" id="ctl00_MainContent_RadGridTeamCompositions_ctl00" width="100%" style="table-layout:auto;empty-cells:show;">
+		<colgroup>
+		<col  />
+		<col  />
+		<col  />
+		<col  />
+		<col  />
+		<col  />
+		<col  />
+	</colgroup>
+<thead>
+			<tr>
+				<th scope="col" class="rgHeader"><a onclick="Telerik.Web.UI.Grid.Sort($find(&#39;ctl00_MainContent_RadGridTeamCompositions_ctl00&#39;), &#39;GamesPlayed&#39;); return false;" title="Click here to sort" href="javascript:__doPostBack(&#39;ctl00$MainContent$RadGridTeamCompositions$ctl00$ctl02$ctl01$ctl00&#39;,&#39;&#39;)">Games Played</a></th><th scope="col" class="rgHeader rgSorted"><a onclick="Telerik.Web.UI.Grid.Sort($find(&#39;ctl00_MainContent_RadGridTeamCompositions_ctl00&#39;), &#39;WinPercent&#39;); return false;" title="Click here to sort" href="javascript:__doPostBack(&#39;ctl00$MainContent$RadGridTeamCompositions$ctl00$ctl02$ctl01$ctl01&#39;,&#39;&#39;)">Win Percent</a>&nbsp;<button type="button" name="ctl00$MainContent$RadGridTeamCompositions$ctl00$ctl02$ctl01$ctl02" value="Sorted desc" onclick="javascript:__doPostBack(&#39;ctl00$MainContent$RadGridTeamCompositions$ctl00$ctl02$ctl01$ctl02&#39;,&#39;&#39;)" title="Sorted desc" class="rgActionButton rgSortDesc"><span class="rgIcon rgSortDescIcon"></span></button></th><th scope="col" class="rgHeader" style="text-align:center;">&nbsp;</th><th scope="col" class="rgHeader" style="text-align:center;">&nbsp;</th><th scope="col" class="rgHeader" style="text-align:center;">&nbsp;</th><th scope="col" class="rgHeader" style="text-align:center;">&nbsp;</th><th scope="col" class="rgHeader" style="text-align:center;">&nbsp;</th>
+			</tr>
+		</thead><tfoot>
+			<tr class="rgPager">
+				<td class="rgPagerCell" colspan="7"><div class="NextPrevAndNumeric">
+					<div class="rgWrap rgArrPart1">
+						<button type="button" name="ctl00$MainContent$RadGridTeamCompositions$ctl00$ctl03$ctl01$ctl02" value=" " onclick="return false;__doPostBack(&#39;ctl00$MainContent$RadGridTeamCompositions$ctl00$ctl03$ctl01$ctl02&#39;,&#39;&#39;)" title="First Page" class="rgActionButton rgPageFirst"><span class="rgIcon"></span></button><button type="button" name="ctl00$MainContent$RadGridTeamCompositions$ctl00$ctl03$ctl01$ctl03" value=" " onclick="return false;__doPostBack(&#39;ctl00$MainContent$RadGridTeamCompositions$ctl00$ctl03$ctl01$ctl03&#39;,&#39;&#39;)" title="Previous Page" class="rgActionButton rgPagePrev"><span class="rgIcon"></span></button>
+					</div><div class="rgWrap rgNumPart">
+						<a onclick="return false;" class="rgCurrentPage" href="javascript:__doPostBack(&#39;ctl00$MainContent$RadGridTeamCompositions$ctl00$ctl03$ctl01$ctl05&#39;,&#39;&#39;)">1</a><a href="javascript:__doPostBack(&#39;ctl00$MainContent$RadGridTeamCompositions$ctl00$ctl03$ctl01$ctl06&#39;,&#39;&#39;)">2</a><a href="javascript:__doPostBack(&#39;ctl00$MainContent$RadGridTeamCompositions$ctl00$ctl03$ctl01$ctl07&#39;,&#39;&#39;)">3</a><a href="javascript:__doPostBack(&#39;ctl00$MainContent$RadGridTeamCompositions$ctl00$ctl03$ctl01$ctl08&#39;,&#39;&#39;)">4</a><a href="javascript:__doPostBack(&#39;ctl00$MainContent$RadGridTeamCompositions$ctl00$ctl03$ctl01$ctl09&#39;,&#39;&#39;)">5</a>
+					</div><div class="rgWrap rgArrPart2">
+						<button type="button" name="ctl00$MainContent$RadGridTeamCompositions$ctl00$ctl03$ctl01$ctl11" value=" " onclick="javascript:__doPostBack(&#39;ctl00$MainContent$RadGridTeamCompositions$ctl00$ctl03$ctl01$ctl11&#39;,&#39;&#39;)" title="Next Page" class="rgActionButton rgPageNext"><span class="rgIcon"></span></button><button type="button" name="ctl00$MainContent$RadGridTeamCompositions$ctl00$ctl03$ctl01$ctl12" value=" " onclick="javascript:__doPostBack(&#39;ctl00$MainContent$RadGridTeamCompositions$ctl00$ctl03$ctl01$ctl12&#39;,&#39;&#39;)" title="Last Page" class="rgActionButton rgPageLast"><span class="rgIcon"></span></button>
+					</div><div class="rgWrap rgAdvPart">
+						<span id="ctl00_MainContent_RadGridTeamCompositions_ctl00_ctl03_ctl01_ChangePageSizeLabel" class="rgPagerLabel">Page size:</span><div id="ctl00_MainContent_RadGridTeamCompositions_ctl00_ctl03_ctl01_PageSizeComboBox" class="RadComboBox RadComboBox_WebBlue">
+							<span class="rcbInner rcbReadOnly"><input name="ctl00$MainContent$RadGridTeamCompositions$ctl00$ctl03$ctl01$PageSizeComboBox" type="text" class="rcbInput radPreventDecorate" id="ctl00_MainContent_RadGridTeamCompositions_ctl00_ctl03_ctl01_PageSizeComboBox_Input" value="100" readonly="readonly" /><button class="rcbActionButton" tabindex="-1" type="button"><span class="rcbIcon rcbIconDown" id="ctl00_MainContent_RadGridTeamCompositions_ctl00_ctl03_ctl01_PageSizeComboBox_Arrow"><!-- &nbsp; --></span><span class="rcbButtonText">select</span></button></span><div class="rcbSlide" style="z-index:6000;display:none;"><div id="ctl00_MainContent_RadGridTeamCompositions_ctl00_ctl03_ctl01_PageSizeComboBox_DropDown" class="RadComboBoxDropDown RadComboBoxDropDown_WebBlue "><div class="rcbScroll rcbWidth"><ul class="rcbList" style="list-style:none;margin:0;padding:0;zoom:1;"><li class="rcbItem">10</li><li class="rcbItem">20</li><li class="rcbItem">50</li><li class="rcbItem">100</li></ul></div></div></div><input id="ctl00_MainContent_RadGridTeamCompositions_ctl00_ctl03_ctl01_PageSizeComboBox_ClientState" name="ctl00_MainContent_RadGridTeamCompositions_ctl00_ctl03_ctl01_PageSizeComboBox_ClientState" type="hidden" />
+						</div>
+					</div><div class="rgWrap rgInfoPart">
+						 &nbsp;<strong>432</strong> items in <strong>5</strong> pages
+					</div>
+				</div></td>
+			</tr>
+		</tfoot><tbody>
+		<tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__0">
+			<td>23482</td><td class="rgSorted">60.4 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__1">
+			<td>8006</td><td class="rgSorted">60.3 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__2">
+			<td>49060</td><td class="rgSorted">60.1 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__3">
+			<td>15147</td><td class="rgSorted">59.9 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#DDDDDD"><span style="font-size: medium;">Utility</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__4">
+			<td>32484</td><td class="rgSorted">59.7 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__5">
+			<td>15890</td><td class="rgSorted">59.5 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__6">
+			<td>2282</td><td class="rgSorted">59.5 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__7">
+			<td>2540</td><td class="rgSorted">59.5 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td><td align="center" bgcolor="#DDDDDD"><span style="font-size: medium;">Utility</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__8">
+			<td>26801</td><td class="rgSorted">59.4 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__9">
+			<td>4218</td><td class="rgSorted">59.3 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__10">
+			<td>44046</td><td class="rgSorted">58.9 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__11">
+			<td>7409</td><td class="rgSorted">58.9 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__12">
+			<td>559</td><td class="rgSorted">58.7 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__13">
+			<td>17831</td><td class="rgSorted">58.6 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__14">
+			<td>20978</td><td class="rgSorted">57.8 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__15">
+			<td>2981</td><td class="rgSorted">57.8 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__16">
+			<td>18229</td><td class="rgSorted">57.4 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__17">
+			<td>3735</td><td class="rgSorted">57.3 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#DDDDDD"><span style="font-size: medium;">Utility</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__18">
+			<td>1229</td><td class="rgSorted">56.9 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__19">
+			<td>3042</td><td class="rgSorted">56.8 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__20">
+			<td>1315</td><td class="rgSorted">56.7 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__21">
+			<td>2333</td><td class="rgSorted">56.7 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__22">
+			<td>23266</td><td class="rgSorted">56.6 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__23">
+			<td>3216</td><td class="rgSorted">56.5 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td><td align="center" bgcolor="#DDDDDD"><span style="font-size: medium;">Utility</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__24">
+			<td>3330</td><td class="rgSorted">56.5 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#DDDDDD"><span style="font-size: medium;">Utility</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__25">
+			<td>465</td><td class="rgSorted">56.3 %</td><td align="center" bgcolor="#3BE33B"><span style="font-size: medium;">Healer</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__26">
+			<td>4794</td><td class="rgSorted">56.0 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#DDDDDD"><span style="font-size: medium;">Utility</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__27">
+			<td>8338</td><td class="rgSorted">56.0 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__28">
+			<td>1959</td><td class="rgSorted">55.9 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__29">
+			<td>13247</td><td class="rgSorted">55.9 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__30">
+			<td>7691</td><td class="rgSorted">55.7 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__31">
+			<td>3391</td><td class="rgSorted">55.6 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__32">
+			<td>604</td><td class="rgSorted">55.6 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__33">
+			<td>7349</td><td class="rgSorted">55.6 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__34">
+			<td>3853</td><td class="rgSorted">55.5 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__35">
+			<td>14483</td><td class="rgSorted">55.5 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__36">
+			<td>3577</td><td class="rgSorted">55.4 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__37">
+			<td>6942</td><td class="rgSorted">55.4 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#DDDDDD"><span style="font-size: medium;">Utility</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__38">
+			<td>1772</td><td class="rgSorted">55.4 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__39">
+			<td>3309</td><td class="rgSorted">55.3 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__40">
+			<td>748</td><td class="rgSorted">55.2 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td><td align="center" bgcolor="#DDDDDD"><span style="font-size: medium;">Utility</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__41">
+			<td>330</td><td class="rgSorted">55.2 %</td><td align="center" bgcolor="#3BE33B"><span style="font-size: medium;">Healer</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__42">
+			<td>3903</td><td class="rgSorted">55.1 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#DDDDDD"><span style="font-size: medium;">Utility</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__43">
+			<td>7047</td><td class="rgSorted">55.1 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__44">
+			<td>930</td><td class="rgSorted">54.9 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__45">
+			<td>9631</td><td class="rgSorted">54.9 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__46">
+			<td>6402</td><td class="rgSorted">54.9 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__47">
+			<td>405</td><td class="rgSorted">54.8 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__48">
+			<td>11533</td><td class="rgSorted">54.7 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__49">
+			<td>5922</td><td class="rgSorted">54.6 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__50">
+			<td>950</td><td class="rgSorted">54.5 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__51">
+			<td>609</td><td class="rgSorted">54.5 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__52">
+			<td>4237</td><td class="rgSorted">54.4 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__53">
+			<td>259</td><td class="rgSorted">54.4 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#DDDDDD"><span style="font-size: medium;">Utility</span></td><td align="center" bgcolor="#DDDDDD"><span style="font-size: medium;">Utility</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__54">
+			<td>16090</td><td class="rgSorted">54.4 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__55">
+			<td>5008</td><td class="rgSorted">54.4 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__56">
+			<td>476</td><td class="rgSorted">54.2 %</td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__57">
+			<td>1076</td><td class="rgSorted">54.1 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__58">
+			<td>1089</td><td class="rgSorted">54.1 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#DDDDDD"><span style="font-size: medium;">Utility</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__59">
+			<td>10134</td><td class="rgSorted">54.0 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__60">
+			<td>741</td><td class="rgSorted">54.0 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#DDDDDD"><span style="font-size: medium;">Utility</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__61">
+			<td>4572</td><td class="rgSorted">53.9 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__62">
+			<td>3577</td><td class="rgSorted">53.8 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#DDDDDD"><span style="font-size: medium;">Utility</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__63">
+			<td>2781</td><td class="rgSorted">53.8 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__64">
+			<td>1052</td><td class="rgSorted">53.7 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__65">
+			<td>648</td><td class="rgSorted">53.7 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__66">
+			<td>530</td><td class="rgSorted">53.6 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#DDDDDD"><span style="font-size: medium;">Utility</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__67">
+			<td>2779</td><td class="rgSorted">53.5 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__68">
+			<td>556</td><td class="rgSorted">53.4 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__69">
+			<td>817</td><td class="rgSorted">53.4 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__70">
+			<td>544</td><td class="rgSorted">53.1 %</td><td align="center" bgcolor="#3BE33B"><span style="font-size: medium;">Healer</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__71">
+			<td>715</td><td class="rgSorted">52.9 %</td><td align="center" bgcolor="#3BE33B"><span style="font-size: medium;">Healer</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__72">
+			<td>2845</td><td class="rgSorted">52.8 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__73">
+			<td>6436</td><td class="rgSorted">52.7 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__74">
+			<td>372</td><td class="rgSorted">52.7 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#3BE33B"><span style="font-size: medium;">Healer</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__75">
+			<td>6883</td><td class="rgSorted">52.6 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__76">
+			<td>243164</td><td class="rgSorted">52.6 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#3BE33B"><span style="font-size: medium;">Healer</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__77">
+			<td>2356</td><td class="rgSorted">52.5 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__78">
+			<td>3107</td><td class="rgSorted">52.5 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__79">
+			<td>1020</td><td class="rgSorted">52.5 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#DDDDDD"><span style="font-size: medium;">Utility</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__80">
+			<td>778</td><td class="rgSorted">52.4 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__81">
+			<td>11060</td><td class="rgSorted">52.4 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#3BE33B"><span style="font-size: medium;">Healer</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__82">
+			<td>700</td><td class="rgSorted">52.4 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__83">
+			<td>1072</td><td class="rgSorted">52.4 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#DDDDDD"><span style="font-size: medium;">Utility</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__84">
+			<td>936</td><td class="rgSorted">52.4 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__85">
+			<td>775</td><td class="rgSorted">52.3 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#DDDDDD"><span style="font-size: medium;">Utility</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__86">
+			<td>373</td><td class="rgSorted">52.0 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__87">
+			<td>1635</td><td class="rgSorted">52.0 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__88">
+			<td>16494</td><td class="rgSorted">51.9 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#3BE33B"><span style="font-size: medium;">Healer</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__89">
+			<td>280</td><td class="rgSorted">51.8 %</td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__90">
+			<td>696</td><td class="rgSorted">51.7 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__91">
+			<td>536</td><td class="rgSorted">51.7 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__92">
+			<td>360</td><td class="rgSorted">51.7 %</td><td align="center" bgcolor="#3BE33B"><span style="font-size: medium;">Healer</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__93">
+			<td>663</td><td class="rgSorted">51.6 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__94">
+			<td>4309</td><td class="rgSorted">51.5 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__95">
+			<td>79871</td><td class="rgSorted">51.5 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#3BE33B"><span style="font-size: medium;">Healer</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#A660E8"><span style="font-size: medium;">Siege</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__96">
+			<td>7797</td><td class="rgSorted">51.5 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#3BE33B"><span style="font-size: medium;">Healer</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__97">
+			<td>24705</td><td class="rgSorted">51.4 %</td><td align="center" bgcolor="#CCCC99"><span style="font-size: medium;">Tank</span></td><td align="center" bgcolor="#3BE33B"><span style="font-size: medium;">Healer</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__98">
+			<td>222</td><td class="rgSorted">51.4 %</td><td align="center" bgcolor="#3BE33B"><span style="font-size: medium;">Healer</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B3B"><span style="font-size: medium;">Burst Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td>
+		</tr><tr class="rgAltRow" id="ctl00_MainContent_RadGridTeamCompositions_ctl00__99">
+			<td>1646</td><td class="rgSorted">51.3 %</td><td align="center" bgcolor="#E3A23B"><span style="font-size: medium;">Bruiser</span></td><td align="center" bgcolor="#60CDCD"><span style="font-size: medium;">Support</span></td><td align="center" bgcolor="#E3E33B"><span style="font-size: medium;">Ambusher</span></td><td align="center" bgcolor="#E33B8E"><span style="font-size: medium;">Sustained Damage</span></td><td align="center" bgcolor="#DDDDDD"><span style="font-size: medium;">Utility</span></td>
+		</tr>
+		</tbody>
+
+	</table><div id="ctl00_MainContent_RadGridTeamCompositions_SharedCalendarContainer" style="display:none;">
+
+	</div><input id="ctl00_MainContent_RadGridTeamCompositions_ClientState" name="ctl00_MainContent_RadGridTeamCompositions_ClientState" type="hidden" />	</div>
+
+</div>
+
+    <div id="MainContent_RadAjaxLoadingPanel1" class="RadAjax RadAjax_WebBlue" style="display:none;">
+	<div class="raDiv">
+
+	</div><div class="raColor raTransp">
+
+	</div>
+</div>
+
+    <div id="MainContent_RadAjaxManager1SU">
+	<span id="ctl00_MainContent_RadAjaxManager1" style="display:none;"></span>
+</div>
+
+
+                    <div id="advertisementBannerMonkeyBrokerBottom" style="text-align: center; margin-top: 15px;" class="advertisementBannerMonkeyBrokerBottom">
+                        <script type="text/javascript"> 
+
+                            if (windowWidth >= 1070) {
+                                MonkeyBroker.fillSlot("Horizontal_2");
+                                ga("send", "event", "AdFillMonkeyBroker", "Horizontal_2", { nonInteraction: true });
+                            }
+                            else if (windowWidth > 728) {
+                                MonkeyBroker.fillSlot("Horizontal_2_Thin");
+                                ga("send", "event", "AdFillMonkeyBroker", "Horizontal_2_Thin", { nonInteraction: true });
+                            }
+
+                        </script>
+                    </div>
+                </section>
+            </div>
+
+            <aside id="footer-widgets" class="no-print">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <ul class="list-unstyled">
+                                <li><a href="https://www.facebook.com/hotslogs">Facebook</a></li>
+                                <li><a href="/Info/About">About Us</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-unstyled" style="text-align: center;">
+                                <li><a href="/Info/FAQ">Frequently Asked Questions</a></li>
+                                <li><a href="/Info/MMRInformation">MMR Information</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <select name="ctl00$DropDownLanguage" id="DropDownLanguage" style="color: black; display: block; margin-left: auto;">
+	<option selected="selected" value="en">English</option>
+	<option value="cs">Ceština</option>
+	<option value="da">Dansk</option>
+	<option value="de">Deutsch</option>
+	<option value="es">Espa&#241;ol</option>
+	<option value="fi">Suomi</option>
+	<option value="fr">Fran&#231;ais</option>
+	<option value="hu">Magyar</option>
+	<option value="ko">한국어</option>
+	<option value="nl">Nederlands</option>
+	<option value="pl">Polski</option>
+	<option value="ru">Pусский</option>
+	<option value="zh-Hans">简体中文</option>
+	<option value="zh-Hant">繁體中文</option>
+
+</select>
+                            <div style="margin-top: 5px; text-align: right;">
+                                <select name="ctl00$DropDownThemeNavbar" id="DropDownThemeNavbar" style="color: black;">
+	<option selected="selected" value="">Light Navbar</option>
+	<option value="navbar-dark">Dark Navbar</option>
+	<option value="navbar-inverse">Inverse Navbar</option>
+
+</select>
+                                <select name="ctl00$DropDownThemeColor" id="DropDownThemeColor" style="color: black;">
+	<option selected="selected" value="style-blue">Blue</option>
+	<option value="style-blue2">Blue 2</option>
+	<option value="style-blue3">Blue 3</option>
+	<option value="style-blue4">Blue 4</option>
+	<option value="style-blue5">Blue 5</option>
+	<option value="style-green">Green</option>
+	<option value="style-green2">Green 2</option>
+	<option value="style-green3">Green 3</option>
+	<option value="style-green4">Green 4</option>
+	<option value="style-green5">Green 5</option>
+	<option value="style-red">Red</option>
+	<option value="style-red2">Red 2</option>
+	<option value="style-red3">Red 3</option>
+	<option value="style-fuchsia">Fuchsia</option>
+	<option value="style-pink">Pink</option>
+	<option value="style-yellow">Yellow</option>
+	<option value="style-yellow2">Yellow 2</option>
+	<option value="style-orange">Orange</option>
+	<option value="style-orange2">Orange 2</option>
+	<option value="style-orange3">Orange 3</option>
+	<option value="style-violet">Violet</option>
+	<option value="style-violet2">Violet 2</option>
+	<option value="style-violet3">Violet 3</option>
+	<option value="style-gray">Gray</option>
+	<option value="style-aqua">Aqua</option>
+
+</select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            
+                        </div>
+                    </div> <!-- row -->
+                </div> <!-- container -->
+            </aside> <!-- footer-widgets -->
+
+            <footer id="footer" class="no-print"><p>&copy; 2016 - HOTS Logs</p></footer>
+        
+
+<script type="text/javascript">
+//<![CDATA[
+Sys.Application.add_init(function() {
+    $create(Telerik.Web.UI.RadComboBox, {"_dropDownWidth":0,"_height":0,"_renderMode":2,"_skin":"WebBlue","_text":"100","_uniqueId":"ctl00$MainContent$RadGridTeamCompositions$ctl00$ctl03$ctl01$PageSizeComboBox","_value":"100","clientStateFieldID":"ctl00_MainContent_RadGridTeamCompositions_ctl00_ctl03_ctl01_PageSizeComboBox_ClientState","collapseAnimation":"{\"duration\":450}","expandAnimation":"{\"duration\":450}","itemData":[{"value":"10","attributes":{"ownerTableViewId":"ctl00_MainContent_RadGridTeamCompositions_ctl00"}},{"value":"20","attributes":{"ownerTableViewId":"ctl00_MainContent_RadGridTeamCompositions_ctl00"}},{"value":"50","attributes":{"ownerTableViewId":"ctl00_MainContent_RadGridTeamCompositions_ctl00"}},{"value":"100","selected":true,"attributes":{"ownerTableViewId":"ctl00_MainContent_RadGridTeamCompositions_ctl00"}}],"localization":"{\"AllItemsCheckedString\":\"All items checked\",\"ItemsCheckedString\":\"items checked\",\"CheckAllString\":\"Check All\"}","selectedIndex":3}, {"selectedIndexChanged":Telerik.Web.UI.Grid.ChangePageSizeComboHandler,"selectedIndexChanging":Telerik.Web.UI.Grid.ChangingPageSizeComboHandler}, null, $get("ctl00_MainContent_RadGridTeamCompositions_ctl00_ctl03_ctl01_PageSizeComboBox"));
+});
+Sys.Application.add_init(function() {
+    $create(Telerik.Web.UI.RadGrid, {"ClientID":"ctl00_MainContent_RadGridTeamCompositions","ClientSettings":{"AllowAutoScrollOnDragDrop":true,"ShouldCreateRows":true,"DataBinding":{},"Selecting":{"CellSelectionMode":0},"Scrolling":{},"Resizing":{},"ClientMessages":{},"KeyboardNavigationSettings":{"AllowActiveRowCycle":false,"EnableKeyboardShortcuts":true,"FocusKey":89,"InitInsertKey":73,"RebindKey":82,"ExitEditInsertModeKey":27,"UpdateInsertItemKey":13,"DeleteActiveRow":127,"ExpandDetailTableKey":39,"CollapseDetailTableKey":37,"SaveChangesKey":85,"CancelChangesKey":81},"Animation":{},"Virtualization":{}},"Skin":"WebBlue","UniqueID":"ctl00$MainContent$RadGridTeamCompositions","_activeRowIndex":"","_controlToFocus":"","_currentPageIndex":0,"_defaultDateTimeFormat":"M/d/yyyy h:mm:ss tt","_editIndexes":"[]","_embeddedSkin":true,"_freezeText":"Freeze","_gridTableViewsData":"[{\"ClientID\":\"ctl00_MainContent_RadGridTeamCompositions_ctl00\",\"UniqueID\":\"ctl00$MainContent$RadGridTeamCompositions$ctl00\",\"PageSize\":100,\"PageCount\":5,\"EditMode\":\"EditForms\",\"AllowPaging\":true,\"CurrentPageIndex\":0,\"VirtualItemCount\":0,\"AllowMultiColumnSorting\":false,\"AllowNaturalSort\":false,\"AllowFilteringByColumn\":false,\"PageButtonCount\":10,\"HasDetailTables\":false,\"HasMultiHeaders\":false,\"CheckListWebServicePath\":\"\",\"GroupLoadMode\":\"Server\",\"PagerAlwaysVisible\":false,\"IsItemInserted\":false,\"clientDataKeyNames\":[],\"hasDetailItemTemplate\":false,\"_dataBindTemplates\":false,\"_selectedItemStyle\":\"\",\"_selectedItemStyleClass\":\"rgSelectedRow\",\"_columnsData\":[{\"UniqueName\":\"GamesPlayed\",\"Resizable\":true,\"Reorderable\":true,\"Selectable\":true,\"Groupable\":true,\"ColumnType\":\"GridBoundColumn\",\"ColumnGroupName\":\"\",\"Editable\":true,\"SortExpression\":\"GamesPlayed\",\"DataTypeName\":\"System.Int32\",\"DataField\":\"GamesPlayed\",\"Display\":true},{\"UniqueName\":\"WinPercent\",\"Resizable\":true,\"Reorderable\":true,\"Selectable\":true,\"Groupable\":true,\"ColumnType\":\"GridBoundColumn\",\"ColumnGroupName\":\"\",\"Editable\":true,\"SortExpression\":\"WinPercent\",\"DataTypeName\":\"System.Decimal\",\"DataField\":\"WinPercent\",\"DataFormatString\":\"{0:p1}\",\"Display\":true},{\"UniqueName\":\"Character1\",\"Resizable\":true,\"Reorderable\":true,\"Selectable\":true,\"Groupable\":true,\"ColumnType\":\"GridImageColumn\",\"ColumnGroupName\":\"\",\"Editable\":false,\"DataTypeName\":\"System.String\",\"DataAlternateTextField\":\"Character1\",\"DataAlternateTextFormatString\":\"\",\"DataImageUrlFields\":[\"CharacterImageURL1\"],\"ImageWidth\":\"30px\",\"DataImageUrlFormatString\":\"//d1i1jxrdh2kvwy.cloudfront.net/Images/Heroes/Portraits/{0}.png\",\"Display\":true},{\"UniqueName\":\"Character2\",\"Resizable\":true,\"Reorderable\":true,\"Selectable\":true,\"Groupable\":true,\"ColumnType\":\"GridImageColumn\",\"ColumnGroupName\":\"\",\"Editable\":false,\"DataTypeName\":\"System.String\",\"DataAlternateTextField\":\"Character2\",\"DataAlternateTextFormatString\":\"\",\"DataImageUrlFields\":[\"CharacterImageURL2\"],\"ImageWidth\":\"30px\",\"DataImageUrlFormatString\":\"//d1i1jxrdh2kvwy.cloudfront.net/Images/Heroes/Portraits/{0}.png\",\"Display\":true},{\"UniqueName\":\"Character3\",\"Resizable\":true,\"Reorderable\":true,\"Selectable\":true,\"Groupable\":true,\"ColumnType\":\"GridImageColumn\",\"ColumnGroupName\":\"\",\"Editable\":false,\"DataTypeName\":\"System.String\",\"DataAlternateTextField\":\"Character3\",\"DataAlternateTextFormatString\":\"\",\"DataImageUrlFields\":[\"CharacterImageURL3\"],\"ImageWidth\":\"30px\",\"DataImageUrlFormatString\":\"//d1i1jxrdh2kvwy.cloudfront.net/Images/Heroes/Portraits/{0}.png\",\"Display\":true},{\"UniqueName\":\"Character4\",\"Resizable\":true,\"Reorderable\":true,\"Selectable\":true,\"Groupable\":true,\"ColumnType\":\"GridImageColumn\",\"ColumnGroupName\":\"\",\"Editable\":false,\"DataTypeName\":\"System.String\",\"DataAlternateTextField\":\"Character4\",\"DataAlternateTextFormatString\":\"\",\"DataImageUrlFields\":[\"CharacterImageURL4\"],\"ImageWidth\":\"30px\",\"DataImageUrlFormatString\":\"//d1i1jxrdh2kvwy.cloudfront.net/Images/Heroes/Portraits/{0}.png\",\"Display\":true},{\"UniqueName\":\"Character5\",\"Resizable\":true,\"Reorderable\":true,\"Selectable\":true,\"Groupable\":true,\"ColumnType\":\"GridImageColumn\",\"ColumnGroupName\":\"\",\"Editable\":false,\"DataTypeName\":\"System.String\",\"DataAlternateTextField\":\"Character5\",\"DataAlternateTextFormatString\":\"\",\"DataImageUrlFields\":[\"CharacterImageURL5\"],\"ImageWidth\":\"30px\",\"DataImageUrlFormatString\":\"//d1i1jxrdh2kvwy.cloudfront.net/Images/Heroes/Portraits/{0}.png\",\"Display\":true}]}]","_masterClientID":"ctl00_MainContent_RadGridTeamCompositions_ctl00","_shouldFocusOnPage":false,"_unfreezeText":"Unfreeze","allowMultiRowSelection":false,"clientStateFieldID":"ctl00_MainContent_RadGridTeamCompositions_ClientState","expandItems":{},"renderMode":2}, null, null, $get("ctl00_MainContent_RadGridTeamCompositions"));
+});
+Sys.Application.add_init(function() {
+    $create(Telerik.Web.UI.RadAjaxLoadingPanel, {"initialDelayTime":0,"isSticky":false,"minDisplayTime":0,"skin":"WebBlue","uniqueID":"ctl00$MainContent$RadAjaxLoadingPanel1","zIndex":90000}, null, null, $get("MainContent_RadAjaxLoadingPanel1"));
+});
+Sys.Application.add_init(function() {
+    $create(Telerik.Web.UI.RadAjaxManager, {"_updatePanels":"","ajaxSettings":[{InitControlID : "MainContent_DropDownHeroGrouping",UpdatedControls : [{ControlID:"MainContent_DropDownHero",PanelID:"MainContent_RadAjaxLoadingPanel1"},{ControlID:"ctl00_MainContent_RadGridTeamCompositions",PanelID:"MainContent_RadAjaxLoadingPanel1"},{ControlID:"MainContent_HeroSubRoleInfoLink",PanelID:"MainContent_RadAjaxLoadingPanel1"}]},{InitControlID : "MainContent_DropDownHero",UpdatedControls : [{ControlID:"ctl00_MainContent_RadGridTeamCompositions",PanelID:"MainContent_RadAjaxLoadingPanel1"}]},{InitControlID : "MainContent_DropDownMapName",UpdatedControls : [{ControlID:"ctl00_MainContent_RadGridTeamCompositions",PanelID:"MainContent_RadAjaxLoadingPanel1"}]},{InitControlID : "ctl00_MainContent_RadGridTeamCompositions",UpdatedControls : [{ControlID:"ctl00_MainContent_RadGridTeamCompositions",PanelID:"MainContent_RadAjaxLoadingPanel1"}]}],"clientEvents":{OnRequestStart:"",OnResponseEnd:""},"defaultLoadingPanelID":"","enableAJAX":true,"enableHistory":false,"links":[],"styles":[],"uniqueID":"ctl00$MainContent$RadAjaxManager1","updatePanelsRenderMode":0}, null, null, $get("ctl00_MainContent_RadAjaxManager1"));
+});
+//]]>
+</script>
+</form>
+
+        <div id="back-top"><a href="#header"><i class="fa fa-chevron-up"></i></a></div>
+
+        
+            <script type="text/html">
+                var _comscore = _comscore || [];
+                _comscore.push({ c1: "2", c2: "6036197" });
+                (function() {
+                    var s = document.createElement("script"), el = document.getElementsByTagName("script")[0]; s.async = true;
+                    s.src = (document.location.protocol == "https:" ? "https://sb" : "http://b") + ".scorecardresearch.com/beacon.js";
+                    el.parentNode.insertBefore(s, el);
+                })();
+            </script>
+            <noscript><img src="http://b.scorecardresearch.com/p?c1=2&c2=6036197&cv=2.0&cj=1" /></noscript>
+        
+        
+    </body>
+</html>
