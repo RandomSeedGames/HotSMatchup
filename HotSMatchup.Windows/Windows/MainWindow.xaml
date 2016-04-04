@@ -13,7 +13,18 @@
         <Grid.Background>
             <ImageBrush ImageSource="/HotSMatchup.Core;component/Assets/Textures/background.jpg" />
         </Grid.Background>
-        <Grid x:Name="TopPanel" Margin="0,0,0,426" Height="46">
+        <Grid.RowDefinitions>
+            <!--LayoutRoot-->
+            <RowDefinition />
+            <RowDefinition Height="*"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <!--/LayoutRoot-->
+        </Grid.ColumnDefinitions>
+        
+        <Grid x:Name="TopPanel" Height="46" Grid.Row="0" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto"/>
@@ -21,9 +32,15 @@
             </Grid.ColumnDefinitions>
             <Image x:Name="imgYourTeam" Source="/HotSMatchup.Core;component/Assets/Textures/yourteam.png" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="247" Height="43" />
             <Grid x:Name="MapPanel" Grid.Column="1" Background="{local:Binding UIStyle.MapPanelBackgroundBrush}" Width="225.1"  Height="51" VerticalAlignment="Bottom">
-            <ComboBox x:Name="MapDropdown" Width="210" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <ComboBox x:Name="MapDropdown" Width="210" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
             <Image x:Name="imgEnemyTeam" Source="/HotSMatchup.Core;component/Assets/Textures/enemyteam.png" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Top" Width="247" Height="43" />
         </Grid>
+        <Grid x:Name="PlayerPanel" Grid.Row="1"/>
+        <Grid x:Name="ScorePanel" Grid.Row="2" Height="165">
+        </Grid>
+        <Canvas x:Name="CanvasFloating">
+            <TextBlock FontFamily="{local:Binding UIStyle.Font1}" Foreground="Orange" FontSize="33" Canvas.Left="368" Canvas.Top="380" Height="33" Width="116">Test</TextBlock>
+        </Canvas>
     </Grid>
 </local:WindowBase>

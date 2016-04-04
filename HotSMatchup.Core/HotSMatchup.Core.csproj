@@ -77,8 +77,8 @@
     <Content Include="Assets\_compData.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Fonts\MavenProLight-300.otf" />
-    <None Include="Assets\Fonts\ONRAMP.ttf" />
+    <Resource Include="Assets\Fonts\MavenProLight-300.otf" />
+    <EmbeddedResource Include="Assets\Fonts\ONRAMP.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Textures\adjust-levels-icon.png" />
