@@ -8,7 +8,7 @@
         xmlns:Controls="clr-namespace:HotSMatchup.Controls" x:Class="HotSMatchup.MainWindow"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type= {x:Type local:WindowBase}, IsDesignTimeCreatable=True}"
-        Title="MainWindow" Height="503.935" Width="907.407">
+        Title="MainWindow" Height="702" Width="1248">
     <Grid x:Name="LayoutRoot">
         <Grid.Background>
             <ImageBrush ImageSource="/HotSMatchup.Core;component/Assets/Textures/background.jpg" />
@@ -23,7 +23,7 @@
             <ColumnDefinition Width="*" />
             <!--/LayoutRoot-->
         </Grid.ColumnDefinitions>
-        
+
         <Grid x:Name="TopPanel" Height="46" Grid.Row="0" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -40,7 +40,8 @@
         <Grid x:Name="ScorePanel" Grid.Row="2" Height="165">
         </Grid>
         <Canvas x:Name="CanvasFloating">
-            <TextBlock FontFamily="{local:Binding UIStyle.Font1}" Foreground="Orange" FontSize="33" Canvas.Left="368" Canvas.Top="380" Height="33" Width="116">Test</TextBlock>
+            <TextBlock x:Name="txt1" FontFamily="{local:Binding UIStyle.Font1}" TextWrapping="Wrap" Foreground="Orange" FontSize="20" Canvas.Left="350" Canvas.Top="467" Height="29" Width="528" TextAlignment="Center">
+Still downloading Synergy-Counter and Hero On Map Data Comp Scores and Hero On Map Bonuses will update when finished</TextBlock>
         </Canvas>
     </Grid>
 </local:WindowBase>

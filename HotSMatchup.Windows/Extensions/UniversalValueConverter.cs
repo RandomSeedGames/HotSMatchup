@@ -12,10 +12,6 @@ namespace HotSMatchup.Controls
 {
     public class UniversalValueConverter : IValueConverter
     {
-        internal static readonly List<Type> ValidTargetTypes = new List<Type>{
-                typeof(System.Windows.Media.Brush),
-                typeof(System.Windows.Media.Color)
-            };
         private static Dictionary<Type, TypeConverterBase> ConverterMap = new Dictionary<Type, TypeConverterBase>();
 
         static UniversalValueConverter()
@@ -137,8 +133,35 @@ namespace HotSMatchup.Controls
                         return value;
                 }
                 return new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)value);
-                
-                throw new InvalidOperationException($"Unsupported source type [{originalType.Name}]");
+            }
+
+            public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+            {
+                return null;
+            }
+        }
+
+        [TypeConverterTo(typeof(System.Windows.Media.FontFamily))]
+        private class FontConverter : TypeConverterBase
+        {
+            public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+            {
+                if (value == null)
+                    return null;
+
+                var originalType = value.GetType();
+
+                if (destinationType == value.GetType())
+                    return value;
+
+                if (value is System.Drawing.Font)
+                {
+                    System.Drawing.Font font = (System.Drawing.Font)value;
+                    value = font.FontFamily;
+                    if (destinationType == value.GetType())
+                        return value;
+                }
+                return null;
             }
 
             public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)

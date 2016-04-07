@@ -15,7 +15,14 @@ namespace HotSMatchup
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            Core.Initializer.Initialize();
             FrameworkElement.StyleProperty.OverrideMetadata(typeof(Window), new FrameworkPropertyMetadata(TryFindResource(typeof(Window))));
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            Core.Initializer.Shutdown();
+            base.OnExit(e);
         }
 
         public static bool InDesignMode => !(Application.Current is App);

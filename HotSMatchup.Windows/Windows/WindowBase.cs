@@ -21,6 +21,9 @@ public class WindowBase : Window
 
     public WindowBase()
     {
+        if (App.InDesignMode)
+            Initializer.Initialize();
+
         //Add window name to namespace so that runtime properties can be referenced from XAML
         //(Name setting must be done here and not in xaml because this is a base class)
         //You probably won't need to, but working example is here in case you do.
