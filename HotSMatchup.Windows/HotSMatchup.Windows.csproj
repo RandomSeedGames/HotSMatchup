@@ -60,9 +60,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\CharacterPicker.xaml.cs">
+      <DependentUpon>CharacterPicker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TeamCharacterGroup.xaml.cs">
+      <DependentUpon>TeamCharacterGroup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\AddValueConverter.cs" />
+    <Compile Include="Extensions\AssetExtension.cs" />
+    <Compile Include="Extensions\BindingAdd.cs" />
     <Compile Include="Extensions\UniversalValueConverter.cs" />
     <Compile Include="Extensions\Binding.cs" />
     <Compile Include="Windows\WindowBase.cs" />
+    <Page Include="Controls\CharacterPicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TeamCharacterGroup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -80,6 +97,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\SplashScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="XAMLResources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -119,14 +140,16 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CalcBinding\CalcBinding\CalcBinding.csproj">
+      <Project>{54ead481-b6fc-41bb-abbe-f0b33e123c61}</Project>
+      <Name>CalcBinding</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HotSMatchup.Core\HotSMatchup.Core.csproj">
       <Project>{76a7113e-8a24-4f5d-96e7-fe0742506601}</Project>
       <Name>HotSMatchup.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controls\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

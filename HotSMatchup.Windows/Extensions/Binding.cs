@@ -19,6 +19,5 @@ namespace HotSMatchup
         {
             this.Converter = WindowBase.UniversalValueConverter;
         }
-        
     }
 }

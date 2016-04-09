@@ -88,8 +88,7 @@ namespace HotSMatchup.Core
 
             public override Stream GetResponseStream()
             {
-                int filePos = Uri.LocalPath.LastIndexOf('/');
-                string path = Uri.LocalPath.Substring(1, filePos - 1);
+                var path = Uri.LocalPath.TrimStart('/');
                 var resourceStream = EmbeddedResourceHelper.GetAssemblyResourceStream(path);
                 return resourceStream;
             }

@@ -8,7 +8,7 @@ using System.Windows.Data;
 using System.Globalization;
 using System.ComponentModel;
 
-namespace HotSMatchup.Controls
+namespace HotSMatchup
 {
     public class UniversalValueConverter : IValueConverter
     {

@@ -17,7 +17,6 @@ namespace HotSMatchup.Core
             if (initialized)
                 return;
             initialized = true;
-
             var guid = ((GuidAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(GuidAttribute), true)[0]).Value;
             var rando = Guid.NewGuid().ToString();
             Globals.TempFolderForInstance = Path.Combine(Path.GetTempPath(), guid + "hm", rando); 
