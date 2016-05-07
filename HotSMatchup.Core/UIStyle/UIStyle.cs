@@ -9,6 +9,7 @@ using System.Resources;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using NuzzFramework;
 #if WINDOWS
 using InnerFont = System.Windows.Media.FontFamily;
 #else

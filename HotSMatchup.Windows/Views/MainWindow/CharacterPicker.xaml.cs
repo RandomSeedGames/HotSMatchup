@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,19 +13,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using NuzzFramework.Windows;
 
 namespace HotSMatchup
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for CharacterPicker.xaml
     /// </summary>
-    public partial class MainWindow
+    public partial class CharacterPicker : ControlBase//, ISupportInitialize
     {
-    //    protected override void OnInitialized(EventArgs e)
-   //     {
-   //         base.OnInitialized(e);
-       //     Width = (double)Resources["StartingWidth"];
-       //     Height = (double)Resources["StartingHeight"];
-   //     }
+        public CharacterPicker()
+        {
+            InitializeComponent();
+           // this.ViewModel = new VMCharacterPicker();
+        }
     }
 }

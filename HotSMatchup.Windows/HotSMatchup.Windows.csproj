@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,11 +35,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>HotSMatchup.Windows.Application</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -53,32 +58,62 @@
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\CharacterPicker.xaml.cs">
+    <Compile Include="Application.cs" />
+    <Compile Include="ViewModels\VMCharacterPicker.cs" />
+    <Compile Include="ViewModels\VMMainWindow.cs" />
+    <Compile Include="Views\Debug.xaml.cs">
+      <DependentUpon>Debug.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\CharacterPicker.xaml.cs">
       <DependentUpon>CharacterPicker.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\TeamCharacterGroup.xaml.cs">
+    <Compile Include="Views\MainWindow\MainWindowControl.xaml.cs">
+      <DependentUpon>MainWindowControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\TeamCharacterGroup.xaml.cs">
       <DependentUpon>TeamCharacterGroup.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Extensions\AddValueConverter.cs" />
-    <Compile Include="Extensions\AssetExtension.cs" />
-    <Compile Include="Extensions\BindingAdd.cs" />
-    <Compile Include="Extensions\UniversalValueConverter.cs" />
-    <Compile Include="Extensions\Binding.cs" />
-    <Compile Include="Windows\WindowBase.cs" />
-    <Page Include="Controls\CharacterPicker.xaml">
+    <Compile Include="Views\MainWindow\TeamView.xaml.cs">
+      <DependentUpon>TeamView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Sandbox.xaml.cs">
+      <DependentUpon>Sandbox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="XAMLResources.cs" />
+    <Page Include="Views\Debug.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\TeamCharacterGroup.xaml">
+    <Page Include="Views\MainWindow\CharacterPicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\MainWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\TeamCharacterGroup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\TeamView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Sandbox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Properties\DesignTimeResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
     </Page>
     <Page Include="Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -128,6 +163,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -148,8 +184,24 @@
       <Project>{76a7113e-8a24-4f5d-96e7-fe0742506601}</Project>
       <Name>HotSMatchup.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NuzzFramework\NuzzFramework.Windows\NuzzFramework.Windows.csproj">
+      <Project>{faf2d9dd-3a2c-4737-834b-b675c56e1709}</Project>
+      <Name>NuzzFramework.Windows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NuzzFramework\NuzzFramework\NuzzFramework.Core.csproj">
+      <Project>{e2f1f9eb-0dc8-48ef-a526-3de419261b6a}</Project>
+      <Name>NuzzFramework.Core</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Views\MainWindow\tank.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="todo.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

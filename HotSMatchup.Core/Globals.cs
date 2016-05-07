@@ -8,6 +8,6 @@ namespace HotSMatchup.Core
 {
     public static class Globals
     {
-        public static string TempFolderForInstance { get; set; }
+
     }
 }

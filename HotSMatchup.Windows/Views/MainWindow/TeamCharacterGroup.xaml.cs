@@ -12,19 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using NuzzFramework.Windows;
 
 namespace HotSMatchup
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for TeamCharacterGroup.xaml
     /// </summary>
-    public partial class MainWindow
+    public partial class TeamCharacterGroup : ControlBase
     {
-    //    protected override void OnInitialized(EventArgs e)
-   //     {
-   //         base.OnInitialized(e);
-       //     Width = (double)Resources["StartingWidth"];
-       //     Height = (double)Resources["StartingHeight"];
-   //     }
+        public TeamCharacterGroup()
+        {
+        }
     }
 }

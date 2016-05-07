@@ -1,0 +1,19 @@
+﻿---TODO---
+Add CalcBinding as submodule within nuzz framework
+Add MVVM CharacterPicker
+
+
+
+---MISC---
+
+
+Sandbox - Calc isnt working
+
+Broken:
+Width = Something
+[fails] Canvas.Left = Width 
+
+Broken:
+xOffset doesn't seem to work
+
+

@@ -9,27 +9,16 @@ using System.Threading.Tasks;
 
 namespace HotSMatchup.Core
 {
-    public static class Initializer
+    public class Initializer : NuzzFramework.AppInitializer
     {
-        static bool initialized = false;
-        public static void Initialize()
+        protected override void Initialize()
         {
-            if (initialized)
-                return;
-            initialized = true;
-            var guid = ((GuidAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(GuidAttribute), true)[0]).Value;
-            var rando = Guid.NewGuid().ToString();
-            Globals.TempFolderForInstance = Path.Combine(Path.GetTempPath(), guid + "hm", rando); 
 
-            ResXWebRequestFactory.Register();
         }
 
-        public static void Shutdown()
+        protected override void Cleanup()
         {
-            var temproot = Path.Combine(Globals.TempFolderForInstance, "..");
-
-            try { Directory.Delete(temproot, true); }
-            catch (Exception) { }
+            base.Cleanup();
         }
     }
 }

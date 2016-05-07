@@ -13,18 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace HotSMatchup
+namespace HotSMatchup.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for Debug.xaml
     /// </summary>
-    public partial class MainWindow
+    public partial class Debug : UserControl
     {
-    //    protected override void OnInitialized(EventArgs e)
-   //     {
-   //         base.OnInitialized(e);
-       //     Width = (double)Resources["StartingWidth"];
-       //     Height = (double)Resources["StartingHeight"];
-   //     }
+        public Debug()
+        {
+            InitializeComponent();
+        }
     }
 }

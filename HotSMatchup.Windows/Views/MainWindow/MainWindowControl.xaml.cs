@@ -12,17 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using NuzzFramework.Windows;
 
-namespace HotSMatchup.Controls
+namespace HotSMatchup
 {
     /// <summary>
-    /// Interaction logic for TeamCharacterGroup.xaml
+    /// Interaction logic for MainWindowControl.xaml
     /// </summary>
-    public partial class TeamCharacterGroup : UserControl
+    public partial class MainWindowControl : TopLevelControl
     {
-        public TeamCharacterGroup()
+        public MainWindowControl()
         {
-            InitializeComponent();
         }
     }
 }

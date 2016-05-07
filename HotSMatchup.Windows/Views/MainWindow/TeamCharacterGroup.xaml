@@ -1,0 +1,31 @@
+﻿<nuzz:ControlBase x:Class="HotSMatchup.TeamCharacterGroup"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:HotSMatchup"
+    xmlns:core="clr-namespace:HotSMatchup.Core;assembly=HotSMatchup.Core"
+    xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
+    xmlns:nuzz="clr-namespace:NuzzFramework.Windows;assembly=NuzzFramework.Windows"
+    mc:Ignorable="d" 
+    d:DesignWidth="600" d:DesignHeight="700"
+    d:DataContext="{d:DesignInstance Type= {x:Type nuzz:ControlBase}, IsDesignTimeCreatable=True}"
+    x:Name="top">
+    <Grid x:Name="grid" 
+          Width="{c:Binding Path=HScale*6, ElementName=top, Mode=OneWay}" 
+          Height="{c:Binding Path=VScale*7, ElementName=top, Mode=OneWay}">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <local:CharacterPicker Grid.Row="0">
+        </local:CharacterPicker>
+        <!--<local:CharacterPicker Grid.Row="1" IsAlternateRow="True" />
+        <local:CharacterPicker Grid.Row="2" />
+        <local:CharacterPicker Grid.Row="3" IsAlternateRow="True" />-->
+        <local:CharacterPicker Grid.Row="4" />
+    </Grid>
+</nuzz:ControlBase>
